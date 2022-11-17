@@ -1,0 +1,116 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Thu, 13 Oct 2022 19:42:50 +0200
+Subject: fp-device: Move FpDevice private functions to public library
+
+This these functions are not really needed by anything else than
+FpDevice, so move them back to the cpp file, so that we don't expose
+them in the private library, given that we don't need them
+---
+ libfprint/fp-device-private.h |  3 ---
+ libfprint/fp-device.c         | 26 ++++++++++++++++++++++++++
+ libfprint/fpi-device.c        | 27 ---------------------------
+ 3 files changed, 26 insertions(+), 30 deletions(-)
+
+diff --git a/libfprint/fp-device-private.h b/libfprint/fp-device-private.h
+index 9b2ea27..759a678 100644
+--- a/libfprint/fp-device-private.h
++++ b/libfprint/fp-device-private.h
+@@ -111,8 +111,6 @@ typedef struct
+   GDestroyNotify   enroll_progress_destroy;
+ } FpEnrollData;
+ 
+-void enroll_data_free (FpEnrollData *enroll_data);
+-
+ typedef struct
+ {
+   FpPrint       *enrolled_print;   /* verify */
+@@ -128,7 +126,6 @@ typedef struct
+   GDestroyNotify match_destroy;
+ } FpMatchData;
+ 
+-void match_data_free (FpMatchData *match_data);
+ 
+ void fpi_device_suspend (FpDevice *device);
+ void fpi_device_resume (FpDevice *device);
+diff --git a/libfprint/fp-device.c b/libfprint/fp-device.c
+index 17178d1..c143644 100644
+--- a/libfprint/fp-device.c
++++ b/libfprint/fp-device.c
+@@ -1088,6 +1088,15 @@ fp_device_resume_finish (FpDevice     *device,
+   return g_task_propagate_boolean (G_TASK (result), error);
+ }
+ 
++static void
++enroll_data_free (FpEnrollData *data)
++{
++  if (data->enroll_progress_destroy)
++    data->enroll_progress_destroy (data->enroll_progress_data);
++  data->enroll_progress_data = NULL;
++  g_clear_object (&data->print);
++  g_free (data);
++}
+ 
+ /**
+  * fp_device_enroll:
+@@ -1217,6 +1226,23 @@ fp_device_enroll_finish (FpDevice     *device,
+   return g_task_propagate_pointer (G_TASK (result), error);
+ }
+ 
++static void
++match_data_free (FpMatchData *data)
++{
++  g_clear_object (&data->print);
++  g_clear_object (&data->match);
++  g_clear_error (&data->error);
++
++  if (data->match_destroy)
++    data->match_destroy (data->match_data);
++  data->match_data = NULL;
++
++  g_clear_object (&data->enrolled_print);
++  g_clear_pointer (&data->gallery, g_ptr_array_unref);
++
++  g_free (data);
++}
++
+ /**
+  * fp_device_verify:
+  * @device: a #FpDevice
+diff --git a/libfprint/fpi-device.c b/libfprint/fpi-device.c
+index ba75065..1b9fa8f 100644
+--- a/libfprint/fpi-device.c
++++ b/libfprint/fpi-device.c
+@@ -522,33 +522,6 @@ fpi_device_get_driver_data (FpDevice *device)
+   return priv->driver_data;
+ }
+ 
+-void
+-enroll_data_free (FpEnrollData *data)
+-{
+-  if (data->enroll_progress_destroy)
+-    data->enroll_progress_destroy (data->enroll_progress_data);
+-  data->enroll_progress_data = NULL;
+-  g_clear_object (&data->print);
+-  g_free (data);
+-}
+-
+-void
+-match_data_free (FpMatchData *data)
+-{
+-  g_clear_object (&data->print);
+-  g_clear_object (&data->match);
+-  g_clear_error (&data->error);
+-
+-  if (data->match_destroy)
+-    data->match_destroy (data->match_data);
+-  data->match_data = NULL;
+-
+-  g_clear_object (&data->enrolled_print);
+-  g_clear_pointer (&data->gallery, g_ptr_array_unref);
+-
+-  g_free (data);
+-}
+-
+ /**
+  * fpi_device_get_enroll_data:
+  * @device: The #FpDevice

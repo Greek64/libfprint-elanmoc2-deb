@@ -1,0 +1,14 @@
+#WHITELIST APPROACH
+
+#Ignore Everything
+*
+
+#Whitelist Directories
+!*/
+
+#WHITELIST
+!.gitignore
+!/libfprint-1.94.5/**
+
+#Add Missing Build Artefact Ignores
+/libfprint-1.94.5/tests/__pycache__/

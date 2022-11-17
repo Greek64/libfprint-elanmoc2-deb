@@ -1,0 +1,5 @@
+meson-Actually-bump-the-version-to-1.94.5.patch
+fp-device-Move-FpDevice-private-functions-to-public-libra.patch
+test-device-fake-Add-more-logging-showing-the-current-dev.patch
+fpi-image-Check-for-PIXMAN-presency-using-ifdef.patch
+fp-image-Remove-config.h-inclusion-in-fpi-header.patch

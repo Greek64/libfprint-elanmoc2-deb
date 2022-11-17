@@ -1,0 +1,19 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Thu, 13 Oct 2022 22:25:23 +0200
+Subject: meson: Actually bump the version to 1.94.5
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index e25a173..7bcd978 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,5 +1,5 @@
+ project('libfprint', [ 'c', 'cpp' ],
+-    version: '1.94.4',
++    version: '1.94.5',
+     license: 'LGPLv2.1+',
+     default_options: [
+         'buildtype=debugoptimized',

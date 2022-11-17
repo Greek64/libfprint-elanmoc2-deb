@@ -1,0 +1,81 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Tue, 17 Dec 2019 04:33:20 +0100
+Subject: fp-image: Remove config.h inclusion in fpi-header
+
+And also avoid defining a function we expose depending on it's presency.
+---
+ libfprint/fp-image.c  | 1 +
+ libfprint/fpi-image.c | 9 +++++++--
+ libfprint/fpi-image.h | 3 ---
+ 3 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/libfprint/fp-image.c b/libfprint/fp-image.c
+index f19c5df..8870cfa 100644
+--- a/libfprint/fp-image.c
++++ b/libfprint/fp-image.c
+@@ -24,6 +24,7 @@
+ #include "fpi-image.h"
+ #include "fpi-log.h"
+ 
++#include <config.h>
+ #include <nbis.h>
+ 
+ /**
+diff --git a/libfprint/fpi-image.c b/libfprint/fpi-image.c
+index b21982e..98f412a 100644
+--- a/libfprint/fpi-image.c
++++ b/libfprint/fpi-image.c
+@@ -24,6 +24,7 @@
+ #include "fpi-log.h"
+ 
+ #include <nbis.h>
++#include <config.h>
+ 
+ #ifdef HAVE_PIXMAN
+ #include <pixman.h>
+@@ -107,12 +108,12 @@ fpi_mean_sq_diff_norm (const guint8 *buf1,
+   return res / size;
+ }
+ 
+-#ifdef HAVE_PIXMAN
+ FpImage *
+ fpi_image_resize (FpImage *orig_img,
+                   guint    w_factor,
+                   guint    h_factor)
+ {
++#ifdef HAVE_PIXMAN
+   int new_width = orig_img->width * w_factor;
+   int new_height = orig_img->height * h_factor;
+   pixman_image_t *orig, *resized;
+@@ -145,5 +146,9 @@ fpi_image_resize (FpImage *orig_img,
+   pixman_image_unref (resized);
+ 
+   return newimg;
+-}
++#else
++  fp_err ("Libfprint compiled without pixman support, impossible to resize");
++
++  return g_object_ref (orig_img);
+ #endif
++}
+diff --git a/libfprint/fpi-image.h b/libfprint/fpi-image.h
+index fcd62b8..3554bb7 100644
+--- a/libfprint/fpi-image.h
++++ b/libfprint/fpi-image.h
+@@ -20,7 +20,6 @@
+ 
+ #pragma once
+ 
+-#include <config.h>
+ #include "fp-image.h"
+ 
+ /**
+@@ -77,8 +76,6 @@ gint fpi_mean_sq_diff_norm (const guint8 *buf1,
+                             const guint8 *buf2,
+                             gint          size);
+ 
+-#if HAVE_PIXMAN
+ FpImage *fpi_image_resize (FpImage *orig,
+                            guint    w_factor,
+                            guint    h_factor);
+-#endif

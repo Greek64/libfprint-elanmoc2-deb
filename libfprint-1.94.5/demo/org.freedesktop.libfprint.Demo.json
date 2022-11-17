@@ -1,0 +1,74 @@
+{
+    "app-id": "org.freedesktop.libfprint.Demo",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "42",
+    "sdk": "org.gnome.Sdk",
+    "command": "gtk-libfprint-test",
+    "finish-args": [
+        /* X11 + XShm access */
+        "--share=ipc", "--socket=fallback-x11",
+        /* Wayland access */
+        "--socket=wayland",
+        /* OpenGL access */
+        "--device=dri",
+        /* USB access */
+        "--device=all"
+    ],
+    "cleanup": [ "/include", "/lib/pkgconfig/" ],
+    "modules": [
+        {
+            "name": "libusb",
+            "config-opts": [ "--disable-static" ],
+            "cleanup": [
+                "/lib/*.la",
+                "/lib/pkgconfig",
+                "/include"
+            ],
+            "sources": [
+                {
+                   "type": "archive",
+                   "url": "https://github.com/libusb/libusb/releases/download/v1.0.26/libusb-1.0.26.tar.bz2",
+                   "sha256": "12ce7a61fc9854d1d2a1ffe095f7b5fac19ddba095c259e6067a46500381b5a5"
+                }
+            ],
+            "post-install": [
+                "install -Dm644 COPYING /app/share/licenses/libusb/COPYING"
+            ]
+        },
+        {
+            "name": "libgusb",
+            "buildsystem": "meson",
+            "config-opts": [ "-Dtests=false", "-Dvapi=false", "-Ddocs=false", "-Dintrospection=false" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/hughsie/libgusb/archive/0.3.0.tar.gz",
+                    "sha256": "b36310f8405d5fd68f6caf4a829f7ab4c627b38fd3d02a139d411fce0f3a49f1"
+                }
+            ]
+        },
+        {
+            "name": "gudev",
+            "buildsystem": "meson",
+            "config-opts": [ "-Dtests=disabled", "-Dintrospection=disabled" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/libgudev/236/libgudev-236.tar.xz",
+                    "sha256": "e50369d06d594bae615eb7aeb787de304ebaad07a26d1043cef8e9c7ab7c9524"
+                }
+            ]
+        },
+        {
+            "name": "libfprint",
+            "buildsystem": "meson",
+            "config-opts": [ "-Dudev_hwdb=disabled", "-Dudev_rules=disabled", "-Dgtk-examples=true", "-Ddrivers=all" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://gitlab.freedesktop.org/libfprint/libfprint.git"
+                }
+            ]
+        }
+    ]
+}
