@@ -125,6 +125,8 @@ driver_sources = {
         [ 'drivers/elan.c' ],
     'elanmoc' :
         [ 'drivers/elanmoc/elanmoc.c' ],
+    'elanmoc2' :
+        [ 'drivers/elanmoc2/elanmoc2.c' ],
     'elanspi' :
         [ 'drivers/elanspi.c' ],
     'nb1010' :
