@@ -31,8 +31,6 @@ static const FpIdEntry whitelist_id_table[] = {
    */
   { .vid = 0x04e8, .pid = 0x730b },
   { .vid = 0x04f3, .pid = 0x036b },
-  { .vid = 0x04f3, .pid = 0x0c00 },
-  { .vid = 0x04f3, .pid = 0x0c4c },
   { .vid = 0x04f3, .pid = 0x0c57 },
   { .vid = 0x04f3, .pid = 0x0c5e },
   { .vid = 0x04f3, .pid = 0x0c5a },
