@@ -1,0 +1,6 @@
+#Ignore Everything
+*
+
+#WHITELIST
+!.gitignore
+!README.md
