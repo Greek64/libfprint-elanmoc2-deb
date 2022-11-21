@@ -9,6 +9,7 @@
 #WHITELIST
 !.gitignore
 !/libfprint-1.90.7/**
+!libfprint-build-deps_1.90.7-2_all.deb
 
 #Add Missing Build Artefact Ignores
 libfprint-1.90.7/tests/__pycache__/
