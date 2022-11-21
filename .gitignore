@@ -13,3 +13,4 @@
 
 #Add Missing Build Artefact Ignores
 libfprint-1.90.7/tests/__pycache__/
+libfprint-1.90.7/.pc

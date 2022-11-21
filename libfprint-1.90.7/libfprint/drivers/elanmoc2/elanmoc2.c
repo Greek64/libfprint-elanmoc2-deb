@@ -725,83 +725,6 @@ elanmoc2_delete(FpDevice *device) {
 }
 
 static void
-elanmoc2_clear_storage_run_state(FpiSsm *ssm, FpDevice *device) {
-    FpiDeviceElanMoC2 *self = FPI_DEVICE_ELANMOC2(device);
-    g_autofree uint8_t *buffer_out = NULL;
-    GError *error = NULL;
-
-    switch (fpi_ssm_get_cur_state(ssm)) {
-        case CLEAR_STORAGE_GET_NUM_ENROLLED:
-            elanmoc2_perform_get_num_enrolled(self, ssm);
-            break;
-        case CLEAR_STORAGE_CHECK_NUM_ENROLLED:
-            self->enrolled_num = self->buffer_in[1];
-            if (self->enrolled_num == 0) {
-                fpi_device_clear_storage_complete(device, NULL);
-                fpi_ssm_mark_completed(g_steal_pointer(&self->ssm));
-                break;
-            }
-            fpi_ssm_next_state(ssm);
-            break;
-        case CLEAR_STORAGE_GET_FINGER_INFO:
-            if (self->print_index >= ELANMOC2_MAX_PRINTS) {
-                fpi_device_clear_storage_complete(device, NULL);
-                fpi_ssm_mark_completed(g_steal_pointer(&self->ssm));
-                break;
-            }
-
-            if ((buffer_out = elanmoc2_prepare_cmd(self, &cmd_finger_info)) == NULL) {
-                fpi_ssm_next_state(ssm);
-                break;
-            }
-            buffer_out[3] = self->print_index;
-            elanmoc2_cmd_transceive(device, ssm, &cmd_finger_info, g_steal_pointer(&buffer_out));
-            break;
-        case CLEAR_STORAGE_DELETE:
-            fpi_device_report_finger_status(device, FP_FINGER_STATUS_NONE);
-
-            if (!elanmoc2_finger_info_is_present(self->buffer_in)) {
-                // Not enrolled
-                self->print_index++;
-                fpi_ssm_jump_to_state(ssm, CLEAR_STORAGE_GET_FINGER_INFO);
-                break;
-            }
-
-            if ((buffer_out = elanmoc2_prepare_cmd(self, &cmd_delete)) == NULL) {
-                fpi_ssm_next_state(ssm);
-                break;
-            }
-            buffer_out[3] = 0xf0 | (self->print_index + 5);
-            memcpy(&buffer_out[4], &self->buffer_in[2], MIN(self->buffer_in_len - 2, cmd_delete.out_len - 4));
-
-            elanmoc2_cmd_transceive(device, ssm, &cmd_delete, g_steal_pointer(&buffer_out));
-            break;
-        case CLEAR_STORAGE_CHECK_DELETED:
-            if (self->buffer_in[1] != 0) {
-                error = fpi_device_error_new_msg(FP_DEVICE_ERROR_GENERAL,
-                                                 "Failed to delete fingerprint");
-                fpi_device_clear_storage_complete(device, error);
-                fpi_ssm_mark_failed(g_steal_pointer(&self->ssm), error);
-                break;
-            }
-            self->print_index++;
-            fpi_ssm_jump_to_state(ssm, CLEAR_STORAGE_GET_FINGER_INFO);
-            break;
-    }
-
-    g_clear_pointer(&self->buffer_in, g_free);
-}
-
-static void
-elanmoc2_clear_storage(FpDevice *device) {
-    FpiDeviceElanMoC2 *self = FPI_DEVICE_ELANMOC2(device);
-    fp_info("[elanmoc2] New clear storage operation");
-    self->print_index = 0;
-    self->ssm = fpi_ssm_new(device, elanmoc2_clear_storage_run_state, CLEAR_STORAGE_NUM_STATES);
-    fpi_ssm_start(self->ssm, elanmoc2_ssm_completed_callback);
-}
-
-static void
 fpi_device_elanmoc2_init(FpiDeviceElanMoC2 *self) {
     G_DEBUG_HERE ();
 }
@@ -818,7 +741,6 @@ fpi_device_elanmoc2_class_init(FpiDeviceElanMoC2Class *klass) {
     dev_class->id_table = elanmoc2_id_table;
 
     dev_class->nr_enroll_stages = ELANMOC2_ENROLL_TIMES;
-    dev_class->temp_hot_seconds = -1;
 
     dev_class->open = elanmoc2_open;
     dev_class->close = elanmoc2_close;
@@ -826,9 +748,6 @@ fpi_device_elanmoc2_class_init(FpiDeviceElanMoC2Class *klass) {
     dev_class->verify = elanmoc2_identify_verify;
     dev_class->enroll = elanmoc2_enroll;
     dev_class->delete = elanmoc2_delete;
-    dev_class->clear_storage = elanmoc2_clear_storage;
     dev_class->list = elanmoc2_list;
     dev_class->cancel = elanmoc2_cancel;
-
-    fpi_device_class_auto_initialize_features(dev_class);
 }
