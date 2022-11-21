@@ -1,0 +1,258 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Thu, 21 Jan 2021 12:22:08 +0100
+Subject: tests: Add trailing newline to busname/devname sysfs attributes
+
+libusb 1.0.24 now expects busnum/devnum to be \n terminated. Update the
+device descriptions accordingly.
+
+https://github.com/martinpitt/umockdev/issues/115
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/merge_requests/240
+---
+ tests/aes3500/device   | 16 ++++++++--------
+ tests/elan/device      | 12 ++++++------
+ tests/goodixmoc/device |  8 ++++----
+ tests/synaptics/device |  4 ++--
+ tests/vfs0050/device   |  4 ++--
+ tests/vfs301/device    | 12 ++++++------
+ tests/vfs5011/device   |  4 ++--
+ 7 files changed, 30 insertions(+), 30 deletions(-)
+
+diff --git a/tests/aes3500/device b/tests/aes3500/device
+index 4a2a903..c662cc8 100644
+--- a/tests/aes3500/device
++++ b/tests/aes3500/device
+@@ -35,11 +35,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0000
+ A: bmAttributes=80
+-A: busnum=3
++A: busnum=3\n
+ A: configuration=
+ H: descriptors=12011001FFFFFF08FF0831570000000100010902200001010080320904000002FFFFFF000705810240000007050202080000
+ A: dev=189:259
+-A: devnum=4
++A: devnum=4\n
+ A: devpath=1.1.3
+ L: driver=../../../../../../../../../../bus/usb/drivers/usb
+ A: idProduct=5731
+@@ -106,11 +106,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=9100
+ A: bmAttributes=e0
+-A: busnum=3
++A: busnum=3\n
+ A: configuration=
+ H: descriptors=12011002090001403022060000910102000109021900010100E0000904000001090000000705810301000C
+ A: dev=189:258
+-A: devnum=3
++A: devnum=3\n
+ A: devpath=1.1
+ L: driver=../../../../../../../../../bus/usb/drivers/usb
+ A: idProduct=0006
+@@ -186,11 +186,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=9100
+ A: bmAttributes=e0
+-A: busnum=3
++A: busnum=3\n
+ A: configuration=
+ H: descriptors=12011002090001403022060000910102000109021900010100E0000904000001090000000705810301000C
+ A: dev=189:257
+-A: devnum=2
++A: devnum=2\n
+ A: devpath=1
+ L: driver=../../../../../../../../bus/usb/drivers/usb
+ A: idProduct=0006
+@@ -270,11 +270,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0415
+ A: bmAttributes=e0
+-A: busnum=3
++A: busnum=3\n
+ A: configuration=
+ H: descriptors=12010002090001406B1D020015040302010109021900010100E0000904000001090000000705810304000C
+ A: dev=189:256
+-A: devnum=1
++A: devnum=1\n
+ A: devpath=0
+ L: driver=../../../../../../../bus/usb/drivers/usb
+ A: idProduct=0002
+diff --git a/tests/elan/device b/tests/elan/device
+index 7374dc2..6e1e421 100644
+--- a/tests/elan/device
++++ b/tests/elan/device
+@@ -36,11 +36,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0140
+ A: bmAttributes=80
+-A: busnum=1
++A: busnum=1\n
+ A: configuration=
+ H: descriptors=1201000200000008F304260C40010102000109023E0001010080320904000005FF0000000921100100012215000705810240000107050102400001070582024000010705830240000107050302400001
+ A: dev=189:93
+-A: devnum=94
++A: devnum=94\n
+ A: devpath=4.4
+ L: driver=../../../../../../bus/usb/drivers/usb
+ A: idProduct=0c26
+@@ -107,11 +107,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=5284
+ A: bmAttributes=e0
+-A: busnum=1
++A: busnum=1\n
+ A: configuration=
+ H: descriptors=1201100209000140EF17181084520102000109021900010100E0000904000001090000000705810301000C
+ A: dev=189:82
+-A: devnum=83
++A: devnum=83\n
+ A: devpath=4
+ L: driver=../../../../../bus/usb/drivers/usb
+ A: idProduct=1018
+@@ -189,11 +189,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0503
+ A: bmAttributes=e0
+-A: busnum=1
++A: busnum=1\n
+ A: configuration=
+ H: descriptors=12010002090001406B1D020003050302010109021900010100E0000904000001090000000705810304000C
+ A: dev=189:0
+-A: devnum=1
++A: devnum=1\n
+ A: devpath=0
+ L: driver=../../../../bus/usb/drivers/usb
+ A: idProduct=0002
+diff --git a/tests/goodixmoc/device b/tests/goodixmoc/device
+index 627c9dc..b008eb2 100644
+--- a/tests/goodixmoc/device
++++ b/tests/goodixmoc/device
+@@ -37,11 +37,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0100
+ A: bmAttributes=a0
+-A: busnum=1
++A: busnum=1\n
+ A: configuration=UIDCBEE4D7B_XXXX_MOC_B0
+ H: descriptors=12010002EF000040C627A26000010102030109022000010103A0320904000002FF0000040705830240000007050102400000
+ A: dev=189:2
+-A: devnum=3
++A: devnum=3\n
+ A: devpath=8
+ L: driver=../../../../../bus/usb/drivers/usb
+ A: idProduct=60a2
+@@ -125,11 +125,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0504
+ A: bmAttributes=e0
+-A: busnum=1
++A: busnum=1\n
+ A: configuration=
+ H: descriptors=12010002090001406B1D020004050302010109021900010100E0000904000001090000000705810304000C
+ A: dev=189:0
+-A: devnum=1
++A: devnum=1\n
+ A: devpath=0
+ L: driver=../../../../bus/usb/drivers/usb
+ A: idProduct=0002
+diff --git a/tests/synaptics/device b/tests/synaptics/device
+index 6da3eea..87c4bed 100644
+--- a/tests/synaptics/device
++++ b/tests/synaptics/device
+@@ -34,11 +34,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0000
+ A: bmAttributes=a0
+-A: busnum=1
++A: busnum=1\n
+ A: configuration=
+ H: descriptors=12010002FF10FF08CB06BD0000000000010109022700010100A0320904000003FF000000070501024000000705810240000007058303080004
+ A: dev=189:69
+-A: devnum=70
++A: devnum=70\n
+ A: devpath=1
+ L: driver=../../../../../bus/usb/drivers/usb
+ A: idProduct=00bd
+diff --git a/tests/vfs0050/device b/tests/vfs0050/device
+index 1bea50a..b66be4b 100644
+--- a/tests/vfs0050/device
++++ b/tests/vfs0050/device
+@@ -38,11 +38,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0060
+ A: bmAttributes=a0
+-A: busnum=1
++A: busnum=1\n
+ A: configuration=
+ H: descriptors=12011001FF10FF088A13500060000000010109022E00010100A0320904000004FF00000007050102400000070581024000000705820240000007058303080004
+ A: dev=189:3
+-A: devnum=4
++A: devnum=4\n
+ A: devpath=9
+ L: driver=../../../../../bus/usb/drivers/usb
+ A: idProduct=0050
+diff --git a/tests/vfs301/device b/tests/vfs301/device
+index 635f795..26d3b57 100644
+--- a/tests/vfs301/device
++++ b/tests/vfs301/device
+@@ -37,11 +37,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0c90
+ A: bmAttributes=a0
+-A: busnum=2
++A: busnum=2\n
+ A: configuration=
+ H: descriptors=12011001FF10FF088A130500900C0000000109022700010100A0320904000003FF000000070501024000000705810240000007058202400000
+ A: dev=189:132
+-A: devnum=5
++A: devnum=5\n
+ A: devpath=1.3
+ L: driver=../../../../../../bus/usb/drivers/usb
+ A: idProduct=0005
+@@ -120,11 +120,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0000
+ A: bmAttributes=e0
+-A: busnum=2
++A: busnum=2\n
+ A: configuration=
+ H: descriptors=12010002090001408780200000000000000109021900010100E0000904000001090000000705810302000C
+ A: dev=189:129
+-A: devnum=2
++A: devnum=2\n
+ A: devpath=1
+ L: driver=../../../../../bus/usb/drivers/usb
+ A: idProduct=0020
+@@ -204,11 +204,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0504
+ A: bmAttributes=e0
+-A: busnum=2
++A: busnum=2\n
+ A: configuration=
+ H: descriptors=12010002090000406B1D020004050302010109021900010100E0000904000001090000000705810304000C
+ A: dev=189:128
+-A: devnum=1
++A: devnum=1\n
+ A: devpath=0
+ L: driver=../../../../bus/usb/drivers/usb
+ A: idProduct=0002
+diff --git a/tests/vfs5011/device b/tests/vfs5011/device
+index 4c75e59..e39a74f 100644
+--- a/tests/vfs5011/device
++++ b/tests/vfs5011/device
+@@ -35,11 +35,11 @@ A: bNumConfigurations=1
+ A: bNumInterfaces= 1
+ A: bcdDevice=0078
+ A: bmAttributes=a0
+-A: busnum=2
++A: busnum=2\n
+ A: configuration=
+ H: descriptors=12011001FF11FF088A13170078000000010109022E00010100A0320904000004FF00000007050102400000070581024000000705820240000007058303080004
+ A: dev=189:144
+-A: devnum=17
++A: devnum=17\n
+ A: devpath=6
+ L: driver=../../../../../bus/usb/drivers/usb
+ A: idProduct=0017

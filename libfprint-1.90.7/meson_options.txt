@@ -1,0 +1,24 @@
+option('drivers',
+       description: 'Drivers to integrate, "default" selects the default set, "all" selects all drivers',
+       type: 'string',
+       value: 'default')
+option('introspection',
+       description: 'Build GObject Introspection repository',
+       type: 'boolean',
+       value: true)
+option('udev_rules',
+       description: 'Whether to create a udev rules file',
+       type: 'boolean',
+       value: true)
+option('udev_rules_dir',
+       description: 'Installation path for udev rules',
+       type: 'string',
+       value: 'auto')
+option('gtk-examples',
+       description: 'Whether to build GTK+ example applications',
+       type: 'boolean',
+       value: false)
+option('doc',
+       description: 'Whether to build the API documentation',
+       type: 'boolean',
+       value: true)

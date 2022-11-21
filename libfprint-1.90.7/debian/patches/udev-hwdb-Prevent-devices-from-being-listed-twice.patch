@@ -1,0 +1,31 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Wed, 20 Jan 2021 18:02:31 +0100
+Subject: udev-hwdb: Prevent devices from being listed twice
+
+The change to print a warning (for testing purposes) from commit
+944e0d03837 (udev-rules: Print warning if an ID is supported) was
+incorrect because it prevented duplicated to be suppressed if a device
+is listed by two independent drivers.
+---
+ libfprint/fprint-list-udev-rules.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/libfprint/fprint-list-udev-rules.c b/libfprint/fprint-list-udev-rules.c
+index af289da..cba2b2f 100644
+--- a/libfprint/fprint-list-udev-rules.c
++++ b/libfprint/fprint-list-udev-rules.c
+@@ -133,10 +133,11 @@ print_driver (const FpDeviceClass *cls)
+ 
+       key = g_strdup_printf ("%04x:%04x", entry->vid, entry->pid);
+ 
+-      if (cls == &whitelist && g_hash_table_lookup (printed, key) != NULL)
++      if (g_hash_table_lookup (printed, key) != NULL)
+         {
+-          g_warning ("%s implemented by driver %s",
+-                     key, (const char *) g_hash_table_lookup (printed, key));
++          if (cls == &whitelist)
++            g_warning ("%s implemented by driver %s",
++                       key, (const char *) g_hash_table_lookup (printed, key));
+           g_free (key);
+           continue;
+         }

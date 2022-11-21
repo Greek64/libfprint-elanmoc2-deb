@@ -1,0 +1,25 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Tue, 19 Jan 2021 13:37:51 +0100
+Subject: udev-rules: Remove supported synaptics devices
+
+---
+ libfprint/fprint-list-udev-rules.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/libfprint/fprint-list-udev-rules.c b/libfprint/fprint-list-udev-rules.c
+index 57aa5e6..af289da 100644
+--- a/libfprint/fprint-list-udev-rules.c
++++ b/libfprint/fprint-list-udev-rules.c
+@@ -45,12 +45,9 @@ static const FpIdEntry whitelist_id_table[] = {
+   { .vid = 0x06cb, .pid = 0x00b7 },
+   { .vid = 0x06cb, .pid = 0x00bb },
+   { .vid = 0x06cb, .pid = 0x00be },
+-  { .vid = 0x06cb, .pid = 0x00c2 },
+-  { .vid = 0x06cb, .pid = 0x00c9 },
+   { .vid = 0x06cb, .pid = 0x00cb },
+   { .vid = 0x06cb, .pid = 0x00d8 },
+   { .vid = 0x06cb, .pid = 0x00da },
+-  { .vid = 0x06cb, .pid = 0x00e7 },
+   { .vid = 0x0a5c, .pid = 0x5801 },
+   { .vid = 0x0a5c, .pid = 0x5805 },
+   { .vid = 0x0a5c, .pid = 0x5834 },

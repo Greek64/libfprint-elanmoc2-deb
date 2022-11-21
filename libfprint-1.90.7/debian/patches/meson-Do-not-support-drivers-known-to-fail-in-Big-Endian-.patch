@@ -1,0 +1,94 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Thu, 10 Dec 2020 20:22:54 +0100
+Subject: meson: Do not support drivers known to fail in Big Endian archs
+
+When building in big endian architectures some device tests will fail,
+as per this we're pretty sure that most of the drivers are not ready
+to work in big-endian architectures.
+Since we're aware of this, better to just stop supporting those drivers
+instead of having each distribution to handle the problem.
+
+So, add a list of supported drivers that is filled depending the
+architecture type we're building on. Keep continue building those
+drivers since we want to at least test-build them, but do not expose
+them as libfprint drivers, so if a device in the system uses any of them
+will be ignored.
+
+At the same time, we keep track of the problem, so that we can fix the
+drivers.
+
+Related to #236
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/merge_requests/216
+---
+ meson.build       | 21 ++++++++++++++++++++-
+ tests/meson.build |  3 ++-
+ 2 files changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 139c571..483f1ec 100644
+--- a/meson.build
++++ b/meson.build
+@@ -89,6 +89,7 @@ cairo_dep = dependency('cairo', required: false)
+ # Drivers
+ drivers = get_option('drivers').split(',')
+ virtual_drivers = [ 'virtual_image' ]
++
+ default_drivers = [
+     'upektc_img',
+     'vfs5011',
+@@ -113,6 +114,14 @@ default_drivers = [
+     'goodixmoc',
+ ]
+ 
++# FIXME: All the drivers should be fixed by adjusting the byte order.
++# See https://gitlab.freedesktop.org/libfprint/libfprint/-/issues/236
++endian_independent_drivers = virtual_drivers
++endian_independent_drivers + [
++    'aes3500',
++    'synaptics',
++]
++
+ all_drivers = default_drivers + virtual_drivers
+ 
+ if drivers == [ 'all' ]
+@@ -150,6 +159,16 @@ foreach driver: drivers
+     endif
+ endforeach
+ 
++supported_drivers = []
++foreach driver: drivers
++    if build_machine.endian() == 'little' or driver in endian_independent_drivers
++        supported_drivers += driver
++    else
++        warning('Driver @0@ is not supported by big endian cpu @1@. Please, fix it!'.format(
++            driver, build_machine.cpu()))
++    endif
++endforeach
++
+ # Export the drivers' types to the core code
+ drivers_type_list = []
+ drivers_type_func = []
+@@ -162,7 +181,7 @@ drivers_type_func += '{'
+ drivers_type_func += '  GArray *drivers = g_array_new (TRUE, FALSE, sizeof (GType));'
+ drivers_type_func += '  GType t;'
+ drivers_type_func += ''
+-foreach driver: drivers
++foreach driver: supported_drivers
+     drivers_type_list += 'extern GType (fpi_device_' + driver + '_get_type) (void);'
+     drivers_type_func += '  t = fpi_device_' + driver + '_get_type ();'
+     drivers_type_func += '  g_array_append_val (drivers, t);'
+diff --git a/tests/meson.build b/tests/meson.build
+index 12a1095..8fcae69 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -70,7 +70,8 @@ if get_option('introspection')
+         driver_envs = envs
+         driver_envs.set('FP_DRIVERS_WHITELIST', driver_test)
+ 
+-        if driver_test in drivers and gusb_dep.version().version_compare('>= 0.3.0')
++        if (driver_test in supported_drivers and
++            gusb_dep.version().version_compare('>= 0.3.0'))
+             test(driver_test,
+                 find_program('umockdev-test.py'),
+                 args: join_paths(meson.current_source_dir(), driver_test),

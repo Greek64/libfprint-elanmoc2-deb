@@ -1,0 +1,4 @@
+version=4
+
+https://gitlab.freedesktop.org/libfprint/libfprint/tags?sort=updated_desc \
+  archive/v(?:[^/]*)/libfprint-v(\d\S*)@ARCHIVE_EXT@

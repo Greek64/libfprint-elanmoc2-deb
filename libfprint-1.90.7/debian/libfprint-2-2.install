@@ -1,0 +1,2 @@
+lib/udev/rules.d/
+usr/lib/${DEB_HOST_MULTIARCH}/libfprint-*.so.*

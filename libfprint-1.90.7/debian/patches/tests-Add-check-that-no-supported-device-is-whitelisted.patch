@@ -1,0 +1,24 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Tue, 19 Jan 2021 13:38:08 +0100
+Subject: tests: Add check that no supported device is whitelisted
+
+---
+ tests/meson.build | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tests/meson.build b/tests/meson.build
+index 8fcae69..27bdd9f 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -169,6 +169,11 @@ foreach test_name: unit_tests
+     )
+ endforeach
+ 
++# Run udev rule generator with fatal warnings
++test('udev-rules',
++     udev_rules,
++     env: envs)
++
+ gdb = find_program('gdb', required: false)
+ if gdb.found()
+     add_test_setup('gdb',
