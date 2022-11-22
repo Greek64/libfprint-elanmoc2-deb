@@ -7,3 +7,4 @@ udev-hwdb-Prevent-devices-from-being-listed-twice.patch
 tests-Add-trailing-newline-to-busname-devname-sysfs-attri.patch
 build-Skip-the-hwdb-test-if-not-all-drivers-are-really-en.patch
 debian/data-Use-auto-generated-but-hardcoded-autosuspend-rules-f.patch
+add_0c00_04c4_devices.patch

@@ -1,0 +1,44 @@
+Index: libfprint-1.90.7/libfprint/fprint-list-udev-rules.c
+===================================================================
+--- libfprint-1.90.7.orig/libfprint/fprint-list-udev-rules.c
++++ libfprint-1.90.7/libfprint/fprint-list-udev-rules.c
+@@ -30,9 +30,7 @@ static const FpIdEntry whitelist_id_tabl
+    *   gio cat https://gitlab.freedesktop.org/libfprint/wiki/-/wikis/Unsupported-Devices.md | sed -n 's!|.*\([0-9a-fA-F]\{4\}\):\([0-9a-fA-F]\{4\}\).*|.*!  { .vid = 0x\1, .pid = 0x\2 },!p'
+    */
+   { .vid = 0x04f3, .pid = 0x036b },
+-  { .vid = 0x04f3, .pid = 0x0c00 },
+   { .vid = 0x04f3, .pid = 0x0c4b },
+-  { .vid = 0x04f3, .pid = 0x0c4c },
+   { .vid = 0x04f3, .pid = 0x0c4f },
+   { .vid = 0x04f3, .pid = 0x0c57 },
+   { .vid = 0x04f3, .pid = 0x2706 },
+Index: libfprint-1.90.7/data/autosuspend.rules
+===================================================================
+--- libfprint-1.90.7.orig/data/autosuspend.rules
++++ libfprint-1.90.7/data/autosuspend.rules
+@@ -267,6 +267,12 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4d", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4d", ENV{LIBFPRINT_DRIVER}="ElanTech Fingerprint Sensor"
+ 
++# ELAN Match-on-Chip 2
++SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4c", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
++SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4c", ENV{LIBFPRINT_DRIVER}="ELAN Match-on-Chip 2"
++SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c00", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
++SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c00", ENV{LIBFPRINT_DRIVER}="ELAN Match-on-Chip 2"
++
+ # Digital Persona U.are.U 4000/4000B/4500
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="00bb", ATTRS{dev}=="*", MODE="0660", GROUP="plugdev"
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="00bb", ENV{LIBFPRINT_DRIVER}="Digital Persona U.are.U 4000/4000B/4500"
+@@ -314,12 +320,8 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="27c6
+ # Hardcoded whitelist
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="036b", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="036b", ENV{LIBFPRINT_DRIVER}="Hardcoded whitelist"
+-SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c00", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
+-SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c00", ENV{LIBFPRINT_DRIVER}="Hardcoded whitelist"
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4b", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4b", ENV{LIBFPRINT_DRIVER}="Hardcoded whitelist"
+-SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4c", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
+-SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4c", ENV{LIBFPRINT_DRIVER}="Hardcoded whitelist"
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4f", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c4f", ENV{LIBFPRINT_DRIVER}="Hardcoded whitelist"
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="04f3", ATTRS{idProduct}=="0c57", ATTRS{dev}=="*", TEST=="power/control", ATTR{power/control}="auto", MODE="0660", GROUP="plugdev"
