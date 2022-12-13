@@ -70,3 +70,4 @@ elanmoc-Fix-warning.patch
 goodixmoc-add-PID-0x634C.patch
 goodixmoc-add-PID-0x631C.patch
 add-elanmoc2-driver.patch
+add-04f3:0c00-device.patch
