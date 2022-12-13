@@ -9,3 +9,4 @@
 #WHITELIST
 !.gitignore
 !/libfprint-1.90.2+tod1/**
+!libfprint-build-deps_1.90.2+tod1-0ubuntu1~20.04.10_all.deb
