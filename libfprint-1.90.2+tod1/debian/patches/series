@@ -69,3 +69,4 @@ elanmoc-Increase-of-the-timeout.patch
 elanmoc-Fix-warning.patch
 goodixmoc-add-PID-0x634C.patch
 goodixmoc-add-PID-0x631C.patch
+add-elanmoc2-driver.patch
