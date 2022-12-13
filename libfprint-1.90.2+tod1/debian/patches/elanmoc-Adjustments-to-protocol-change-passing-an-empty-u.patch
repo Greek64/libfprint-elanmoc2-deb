@@ -1,0 +1,35 @@
+From: hermanlin <herman.lin@emc.com.tw>
+Date: Tue, 10 Aug 2021 16:22:54 +0800
+Subject: elanmoc: Adjustments to protocol change (passing an empty user ID)
+
+---
+ libfprint/drivers/elanmoc/elanmoc.c | 2 +-
+ libfprint/drivers/elanmoc/elanmoc.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libfprint/drivers/elanmoc/elanmoc.c b/libfprint/drivers/elanmoc/elanmoc.c
+index edbe4d1..d0dd6e8 100644
+--- a/libfprint/drivers/elanmoc/elanmoc.c
++++ b/libfprint/drivers/elanmoc/elanmoc.c
+@@ -431,7 +431,7 @@ elan_enroll_run_state (FpiSsm *ssm, FpDevice *dev)
+     case MOC_ENROLL_REENROLL_CHECK:
+       data = fpi_ssm_get_data (ssm);
+       cmd_buf = elanmoc_compose_cmd (&elanmoc_check_reenroll_cmd);
+-      cmd_buf[4] = data[16];
++      memcpy (cmd_buf + 3, data, ELAN_USERDATE_SIZE);
+       elanmoc_get_cmd (dev, cmd_buf, elanmoc_check_reenroll_cmd.cmd_len, elanmoc_check_reenroll_cmd.resp_len, 0, elanmoc_reenroll_cb);
+       break;
+ 
+diff --git a/libfprint/drivers/elanmoc/elanmoc.h b/libfprint/drivers/elanmoc/elanmoc.h
+index 84eed7e..daf630e 100644
+--- a/libfprint/drivers/elanmoc/elanmoc.h
++++ b/libfprint/drivers/elanmoc/elanmoc.h
+@@ -135,7 +135,7 @@ static const struct elanmoc_cmd elanmoc_set_mod_cmd = {
+ 
+ static const struct elanmoc_cmd elanmoc_check_reenroll_cmd = {
+   .cmd_header = {0x40, 0xff, 0x22},
+-  .cmd_len = 5,
++  .cmd_len = 3 + ELAN_USERDATE_SIZE,
+   .resp_len = 2,
+ };
+ 

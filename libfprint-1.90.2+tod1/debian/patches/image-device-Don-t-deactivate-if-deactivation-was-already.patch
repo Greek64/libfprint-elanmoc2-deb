@@ -1,0 +1,27 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Mon, 28 Sep 2020 19:12:28 +0200
+Subject: image-device: Don't deactivate if deactivation was already started
+
+The test only prevent deactivation after it completed. Also guard
+against trying to deactivate a second time.
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/3ce6a1554
+
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1897613
+---
+ libfprint/fpi-image-device.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libfprint/fpi-image-device.c b/libfprint/fpi-image-device.c
+index 11399a1..1f00ccc 100644
+--- a/libfprint/fpi-image-device.c
++++ b/libfprint/fpi-image-device.c
+@@ -71,7 +71,7 @@ fpi_image_device_deactivate (FpImageDevice *self)
+   FpImageDevicePrivate *priv = fp_image_device_get_instance_private (self);
+   FpImageDeviceClass *cls = FP_IMAGE_DEVICE_GET_CLASS (device);
+ 
+-  if (!priv->active)
++  if (!priv->active || priv->state == FPI_IMAGE_DEVICE_STATE_INACTIVE)
+     {
+       /* XXX: We currently deactivate both from minutiae scan result
+        *      and finger off report. */

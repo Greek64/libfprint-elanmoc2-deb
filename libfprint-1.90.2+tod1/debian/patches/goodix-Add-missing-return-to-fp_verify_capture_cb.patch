@@ -1,0 +1,23 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Mon, 14 Dec 2020 20:34:56 +0100
+Subject: goodix: Add missing return to fp_verify_capture_cb
+
+Found by coverity. While quite bad in theory, proper safeguards are in
+place, so it will only result in a g_return_val_if_fail to be hit rather
+than causing more severe side effects.
+---
+ libfprint/drivers/goodixmoc/goodix.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix.c b/libfprint/drivers/goodixmoc/goodix.c
+index e532721..ce1462b 100644
+--- a/libfprint/drivers/goodixmoc/goodix.c
++++ b/libfprint/drivers/goodixmoc/goodix.c
+@@ -342,6 +342,7 @@ fp_verify_capture_cb (FpiDeviceGoodixMoc  *self,
+     {
+       fpi_ssm_mark_failed (self->task_ssm,
+                            fpi_device_retry_new (FP_DEVICE_RETRY_CENTER_FINGER));
++      return;
+     }
+   fpi_ssm_next_state (self->task_ssm);
+ }

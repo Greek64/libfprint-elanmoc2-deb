@@ -1,0 +1,40 @@
+From: Didier Raboud <odyx@debian.org>
+Date: Thu, 24 Sep 2020 06:27:59 +0200
+Subject: Tweak the udev rules creator for Debian usage
+
+Origin: vendor
+Last-Update: 2020-01-10
+
+List all devices; automatic power/control only for the non-blacklisted
+ones; mode and group to all.
+---
+ libfprint/fprint-list-udev-rules.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/libfprint/fprint-list-udev-rules.c b/libfprint/fprint-list-udev-rules.c
+index 183cfa5..ff8fd1c 100644
+--- a/libfprint/fprint-list-udev-rules.c
++++ b/libfprint/fprint-list-udev-rules.c
+@@ -134,9 +134,6 @@ print_driver (const FpDeviceClass *cls)
+         if (entry->vid == bl_entry->vid && entry->pid == bl_entry->pid)
+           break;
+ 
+-      if (bl_entry->vid != 0)
+-        continue;
+-
+       key = g_strdup_printf ("%04x:%04x", entry->vid, entry->pid);
+ 
+       if (g_hash_table_lookup (printed, key) != NULL)
+@@ -150,8 +147,10 @@ print_driver (const FpDeviceClass *cls)
+       if (num_printed == 0)
+         g_print ("# %s\n", cls->full_name);
+ 
+-      g_print ("SUBSYSTEM==\"usb\", ATTRS{idVendor}==\"%04x\", ATTRS{idProduct}==\"%04x\", ATTRS{dev}==\"*\", TEST==\"power/control\", ATTR{power/control}=\"auto\"\n",
+-               entry->vid, entry->pid);
++      g_print ("SUBSYSTEM==\"usb\", ATTRS{idVendor}==\"%04x\", ATTRS{idProduct}==\"%04x\", ATTRS{dev}==\"*\", ", entry->vid, entry->pid);
++      if (bl_entry->vid == 0)
++          g_print ("TEST==\"power/control\", ATTR{power/control}=\"auto\", ");
++      g_print ("MODE=\"0660\", GROUP=\"plugdev\"\n");
+       g_print ("SUBSYSTEM==\"usb\", ATTRS{idVendor}==\"%04x\", ATTRS{idProduct}==\"%04x\", ENV{LIBFPRINT_DRIVER}=\"%s\"\n",
+                entry->vid, entry->pid, cls->full_name);
+       num_printed++;

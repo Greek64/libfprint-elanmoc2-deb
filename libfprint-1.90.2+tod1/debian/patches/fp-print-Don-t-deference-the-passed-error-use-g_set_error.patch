@@ -1,0 +1,27 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Wed, 9 Dec 2020 02:02:45 +0100
+Subject: fp-print: Don't deference the passed error, use g_set_error instead
+
+It still may be NULL, but we don't protect from that.
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/0d9d7dc
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1908107
+---
+ libfprint/fp-print.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/libfprint/fp-print.c b/libfprint/fp-print.c
+index 7101207..255b611 100644
+--- a/libfprint/fp-print.c
++++ b/libfprint/fp-print.c
+@@ -886,8 +886,7 @@ fp_print_deserialize (const guchar *data,
+   return g_steal_pointer (&result);
+ 
+ invalid_format:
+-  *error = g_error_new_literal (G_IO_ERROR,
+-                                G_IO_ERROR_INVALID_DATA,
+-                                "Data could not be parsed");
++  g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA,
++               "Data could not be parsed");
+   return NULL;
+ }

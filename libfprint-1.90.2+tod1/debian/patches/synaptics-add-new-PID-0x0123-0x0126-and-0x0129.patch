@@ -1,0 +1,22 @@
+From: Aris Lin <Aris.Lin@synaptics.com>
+Date: Fri, 17 Sep 2021 15:03:51 +0800
+Subject: [PATCH] synaptics: add new PID 0x0123, 0x0126, and 0x0129
+
+---
+ libfprint/drivers/synaptics/synaptics.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/libfprint/drivers/synaptics/synaptics.c b/libfprint/drivers/synaptics/synaptics.c
+index 4293d48..9196338 100644
+--- a/libfprint/drivers/synaptics/synaptics.c
++++ b/libfprint/drivers/synaptics/synaptics.c
+@@ -38,6 +38,9 @@ static const FpIdEntry id_table[] = {
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x0100,  },
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00F0,  },
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x0103,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x0123,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x0126,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x0129,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

@@ -1,0 +1,43 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Wed, 9 Dec 2020 10:46:36 +0100
+Subject: print: Return sunk reference from deserialize function
+
+This function was always documented to return a sunk reference, but it
+did not do so. This change is technically backward incompatible.
+
+However, it only has an effect if anything is doing a g_object_ref_sink.
+Which may happen inside libfprint itself. With the change, most API
+users (including fprintd) are fixed to do refcounting correctly. Any API
+user which worked around this will have a memory leak now.
+
+That is not ideal, but it is not really that bad overall. And returning
+a floating reference for FpPrint creation was a bad idea in the first
+place. And it really only makes sense for fp_print_new as the only
+(public) use case is to create the template for enrollment.
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/499de3e
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1908107
+---
+ libfprint/fp-print.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libfprint/fp-print.c b/libfprint/fp-print.c
+index 255b611..b754efa 100644
+--- a/libfprint/fp-print.c
++++ b/libfprint/fp-print.c
+@@ -819,6 +819,7 @@ fp_print_deserialize (const guchar *data,
+                              "device-id", device_id,
+                              "device-stored", device_stored,
+                              NULL);
++      g_object_ref_sink (result);
+       fpi_print_set_type (result, FPI_PRINT_NBIS);
+       for (i = 0; i < g_variant_n_children (prints); i++)
+         {
+@@ -868,6 +869,7 @@ fp_print_deserialize (const guchar *data,
+                              "device-stored", device_stored,
+                              "fpi-data", fp_data,
+                              NULL);
++      g_object_ref_sink (result);
+     }
+   else
+     {

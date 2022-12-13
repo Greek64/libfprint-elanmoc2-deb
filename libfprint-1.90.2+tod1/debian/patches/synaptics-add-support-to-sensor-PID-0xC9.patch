@@ -1,0 +1,22 @@
+From: Vincent Huang <vincenthsw@gmail.com>
+Date: Mon, 30 Nov 2020 13:53:07 +0800
+Subject: synaptics: add support to sensor PID 0xC9
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/0eee6a5
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1905593
+---
+ libfprint/drivers/synaptics/synaptics.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libfprint/drivers/synaptics/synaptics.c b/libfprint/drivers/synaptics/synaptics.c
+index 7c76301..9bc1ed9 100644
+--- a/libfprint/drivers/synaptics/synaptics.c
++++ b/libfprint/drivers/synaptics/synaptics.c
+@@ -34,6 +34,7 @@ static const FpIdEntry id_table[] = {
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xF9,  },
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xFC,  },
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xC2,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xC9,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

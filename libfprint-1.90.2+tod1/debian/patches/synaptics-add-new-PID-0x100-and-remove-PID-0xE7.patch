@@ -1,0 +1,35 @@
+From: Aris Lin <Aris.Lin@synaptics.com>
+Date: Thu, 18 Mar 2021 18:29:10 +0800
+Subject: [PATCH] synaptics: add new PID 0x100 and remove PID 0xE7
+
+---
+ libfprint/drivers/synaptics/synaptics.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/libfprint/drivers/synaptics/synaptics.c b/libfprint/drivers/synaptics/synaptics.c
+index aeb28d9..b1a35f3 100644
+--- a/libfprint/drivers/synaptics/synaptics.c
++++ b/libfprint/drivers/synaptics/synaptics.c
+@@ -28,14 +28,14 @@
+ G_DEFINE_TYPE (FpiDeviceSynaptics, fpi_device_synaptics, FP_TYPE_DEVICE)
+ 
+ static const FpIdEntry id_table[] = {
+-  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xBD,  },
+-  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xE9,  },
+-  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xDF,  },
+-  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xF9,  },
+-  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xFC,  },
+-  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xC2,  },
+-  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xC9,  },
+-  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xE7,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00BD,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00E9,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00DF,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00F9,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00FC,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00C2,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00C9,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x0100,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

@@ -1,0 +1,20 @@
+From: Nelson Jeppesen <code@jeppesen.io>
+Date: Fri, 7 May 2021 13:02:11 -0700
+Subject: goodixmoc: Add PID 6A94
+
+---
+ libfprint/drivers/goodixmoc/goodix.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix.c b/libfprint/drivers/goodixmoc/goodix.c
+index 5b538a8..ef87a86 100644
+--- a/libfprint/drivers/goodixmoc/goodix.c
++++ b/libfprint/drivers/goodixmoc/goodix.c
+@@ -1541,6 +1541,7 @@ static const FpIdEntry id_table[] = {
+   { .vid = 0x27c6,  .pid = 0x63AC,  },
+   { .vid = 0x27c6,  .pid = 0x639C,  },
+   { .vid = 0x27c6,  .pid = 0x6594,  },
++  { .vid = 0x27c6,  .pid = 0x6A94,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

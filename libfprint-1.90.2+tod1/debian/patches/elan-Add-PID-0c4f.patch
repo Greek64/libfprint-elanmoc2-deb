@@ -1,0 +1,34 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Wed, 28 Apr 2021 15:43:14 +0200
+Subject: elan: Add PID 0c4f
+
+Users are reporting that the sensor works fine.
+---
+ libfprint/drivers/elan.h           | 1 +
+ libfprint/fprint-list-udev-rules.c | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libfprint/drivers/elan.h b/libfprint/drivers/elan.h
+index 7eae314..b99ff93 100644
+--- a/libfprint/drivers/elan.h
++++ b/libfprint/drivers/elan.h
+@@ -213,6 +213,7 @@ static const FpIdEntry elan_id_table[] = {
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c3d, .driver_data = ELAN_ALL_DEV},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c42, .driver_data = ELAN_0C42},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c4d, .driver_data = ELAN_ALL_DEV},
++  {.vid = ELAN_VEND_ID,  .pid = 0x0c4f, .driver_data = ELAN_ALL_DEV},
+   {.vid = 0,  .pid = 0,  .driver_data = 0},
+ };
+ 
+diff --git a/libfprint/fprint-list-udev-rules.c b/libfprint/fprint-list-udev-rules.c
+index af289da..ab385ef 100644
+--- a/libfprint/fprint-list-udev-rules.c
++++ b/libfprint/fprint-list-udev-rules.c
+@@ -33,7 +33,6 @@ static const FpIdEntry whitelist_id_table[] = {
+   { .vid = 0x04f3, .pid = 0x0c00 },
+   { .vid = 0x04f3, .pid = 0x0c4b },
+   { .vid = 0x04f3, .pid = 0x0c4c },
+-  { .vid = 0x04f3, .pid = 0x0c4f },
+   { .vid = 0x04f3, .pid = 0x0c57 },
+   { .vid = 0x04f3, .pid = 0x2706 },
+   { .vid = 0x06cb, .pid = 0x0081 },

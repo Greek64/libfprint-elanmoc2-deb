@@ -1,0 +1,3 @@
+usr/include/*/tod-*/*
+usr/lib/*/libfprint-*-tod.so
+usr/lib/*/pkgconfig/libfprint-*-tod-*.pc

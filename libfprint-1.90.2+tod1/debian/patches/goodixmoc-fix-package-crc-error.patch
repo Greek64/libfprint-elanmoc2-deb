@@ -1,0 +1,22 @@
+From: fengqiangguo <fengjungle@126.com>
+Date: Wed, 9 Dec 2020 17:54:09 +0800
+Subject: goodixmoc: fix package crc error fix package length type convert
+ error
+
+---
+ libfprint/drivers/goodixmoc/goodix_proto.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix_proto.c b/libfprint/drivers/goodixmoc/goodix_proto.c
+index 3174170..ece8123 100644
+--- a/libfprint/drivers/goodixmoc/goodix_proto.c
++++ b/libfprint/drivers/goodixmoc/goodix_proto.c
+@@ -229,7 +229,7 @@ gx_proto_parse_header (
+ 
+   memcpy (pheader, buffer, sizeof (pack_header));
+ 
+-  pheader->len = GUINT16_FROM_LE (*(buffer + 4));
++  pheader->len = GUINT16_FROM_LE ( *(uint16_t *) (buffer + 4));
+   pheader->len -= PACKAGE_CRC_SIZE;
+ 
+   return 0;

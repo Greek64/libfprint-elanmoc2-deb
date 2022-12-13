@@ -1,0 +1,32 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Mon, 19 Oct 2020 16:59:28 +0200
+Subject: synaptics: Fix missing reference to interrupt transfer
+
+When resubmitting the interrupt transfer we need to add a new reference
+as the submit function will steal it again.
+
+Origin: https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/90a1abf2
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1905593
+---
+ libfprint/drivers/synaptics/synaptics.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/libfprint/drivers/synaptics/synaptics.c b/libfprint/drivers/synaptics/synaptics.c
+index a3d2a51..ee56271 100644
+--- a/libfprint/drivers/synaptics/synaptics.c
++++ b/libfprint/drivers/synaptics/synaptics.c
+@@ -202,7 +202,13 @@ cmd_interrupt_cb (FpiUsbTransfer *transfer,
+   if (transfer->buffer[0] & USB_ASYNC_MESSAGE_PENDING || error)
+     fpi_ssm_next_state (transfer->ssm);
+   else
+-    fpi_usb_transfer_submit (transfer, 1000, NULL, cmd_interrupt_cb, NULL);
++    {
++      fpi_usb_transfer_submit (fpi_usb_transfer_ref (transfer),
++                               1000,
++                               NULL,
++                               cmd_interrupt_cb,
++                               NULL);
++    }
+ }
+ 
+ static void

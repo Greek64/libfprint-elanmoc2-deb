@@ -1,0 +1,22 @@
+From: fengqiangguo <fengjungle@126.com>
+Date: Wed, 16 Dec 2020 20:35:53 +0800
+Subject: goodixmoc: add two new Goodix PID support.
+
+Add two new Goodix PID 0x63AC and 0x639C, to support two more Goodix fingerprint devices on Linux platform.
+---
+ libfprint/drivers/goodixmoc/goodix.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix.c b/libfprint/drivers/goodixmoc/goodix.c
+index bb0368b..5148553 100644
+--- a/libfprint/drivers/goodixmoc/goodix.c
++++ b/libfprint/drivers/goodixmoc/goodix.c
+@@ -1424,6 +1424,8 @@ static const FpIdEntry id_table[] = {
+   { .vid = 0x27c6,  .pid = 0x5840,  },
+   { .vid = 0x27c6,  .pid = 0x6496,  },
+   { .vid = 0x27c6,  .pid = 0x60A2,  },
++  { .vid = 0x27c6,  .pid = 0x63AC,  },
++  { .vid = 0x27c6,  .pid = 0x639C,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

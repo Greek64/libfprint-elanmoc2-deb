@@ -1,0 +1,33 @@
+From: tt83 <tmf83.22@gmail.com>
+Date: Thu, 22 Oct 2020 07:06:04 +0300
+Subject: elan: added 0c4d device to the array of supported devices
+
+---
+ libfprint/drivers/elan.h           | 1 +
+ libfprint/fprint-list-udev-rules.c | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libfprint/drivers/elan.h b/libfprint/drivers/elan.h
+index d370623..7eae314 100644
+--- a/libfprint/drivers/elan.h
++++ b/libfprint/drivers/elan.h
+@@ -212,6 +212,7 @@ static const FpIdEntry elan_id_table[] = {
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c33, .driver_data = ELAN_ALL_DEV},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c3d, .driver_data = ELAN_ALL_DEV},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c42, .driver_data = ELAN_0C42},
++  {.vid = ELAN_VEND_ID,  .pid = 0x0c4d, .driver_data = ELAN_ALL_DEV},
+   {.vid = 0,  .pid = 0,  .driver_data = 0},
+ };
+ 
+diff --git a/libfprint/fprint-list-udev-rules.c b/libfprint/fprint-list-udev-rules.c
+index e4f212b..af289da 100644
+--- a/libfprint/fprint-list-udev-rules.c
++++ b/libfprint/fprint-list-udev-rules.c
+@@ -33,7 +33,6 @@ static const FpIdEntry whitelist_id_table[] = {
+   { .vid = 0x04f3, .pid = 0x0c00 },
+   { .vid = 0x04f3, .pid = 0x0c4b },
+   { .vid = 0x04f3, .pid = 0x0c4c },
+-  { .vid = 0x04f3, .pid = 0x0c4d },
+   { .vid = 0x04f3, .pid = 0x0c4f },
+   { .vid = 0x04f3, .pid = 0x0c57 },
+   { .vid = 0x04f3, .pid = 0x2706 },

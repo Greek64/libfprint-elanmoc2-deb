@@ -1,0 +1,23 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Wed, 25 Nov 2020 18:28:41 +0100
+Subject: udev-rules: Regenerate from wiki to include VFS495
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/fa3bdb8
+
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1905603
+---
+ libfprint/fprint-list-udev-rules.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libfprint/fprint-list-udev-rules.c b/libfprint/fprint-list-udev-rules.c
+index bbca6ef..aee13e4 100644
+--- a/libfprint/fprint-list-udev-rules.c
++++ b/libfprint/fprint-list-udev-rules.c
+@@ -59,6 +59,7 @@ static const FpIdEntry whitelist_id_table[] = {
+   { .vid = 0x10a5, .pid = 0x0007 },
+   { .vid = 0x1188, .pid = 0x9545 },
+   { .vid = 0x138a, .pid = 0x0007 },
++  { .vid = 0x138a, .pid = 0x003a },
+   { .vid = 0x138a, .pid = 0x003c },
+   { .vid = 0x138a, .pid = 0x003d },
+   { .vid = 0x138a, .pid = 0x003f },

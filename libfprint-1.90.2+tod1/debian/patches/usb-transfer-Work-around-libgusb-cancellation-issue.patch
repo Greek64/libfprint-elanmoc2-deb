@@ -1,0 +1,69 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Thu, 1 Oct 2020 00:14:48 +0200
+Subject: usb-transfer: Work around libgusb cancellation issue
+
+We have plenty of code paths where a transfer may be cancelled before it
+is submitted. Unfortunately, libgusb up to and including version 0.3.6
+are not handling that case correctly (due to libusb ignoring
+cancellation on transfers that are not yet submitted).
+
+Work around this, but do so in a somewhat lazy fashion that is not
+entirely race free.
+
+Closes: #306
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/c7cab77fc
+
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1897613
+---
+ libfprint/fpi-usb-transfer.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/libfprint/fpi-usb-transfer.c b/libfprint/fpi-usb-transfer.c
+index 74b5b1c..20e6a78 100644
+--- a/libfprint/fpi-usb-transfer.c
++++ b/libfprint/fpi-usb-transfer.c
+@@ -353,6 +353,24 @@ transfer_finish_cb (GObject *source_object, GAsyncResult *res, gpointer user_dat
+   fpi_usb_transfer_unref (transfer);
+ }
+ 
++static gboolean
++transfer_cancel_cb (FpiUsbTransfer *transfer)
++{
++  GError *error;
++  FpiUsbTransferCallback callback;
++
++  error = g_error_new_literal (G_IO_ERROR,
++                               G_IO_ERROR_CANCELLED,
++                               "Transfer was cancelled before being started");
++  callback = transfer->callback;
++  transfer->callback = NULL;
++  transfer->actual_length = -1;
++  callback (transfer, transfer->device, transfer->user_data, error);
++
++  fpi_usb_transfer_unref (transfer);
++
++  return G_SOURCE_REMOVE;
++}
+ 
+ /**
+  * fpi_usb_transfer_submit:
+@@ -386,6 +404,18 @@ fpi_usb_transfer_submit (FpiUsbTransfer        *transfer,
+ 
+   log_transfer (transfer, TRUE, NULL);
+ 
++  /* Work around libgusb cancellation issue, see
++   *   https://github.com/hughsie/libgusb/pull/42
++   * should be fixed with libgusb 0.3.7.
++   * Note that this is not race free, we rely on libfprint and API users
++   * not cancelling from a different thread here.
++   */
++  if (cancellable && g_cancellable_is_cancelled (cancellable))
++    {
++      g_idle_add ((GSourceFunc) transfer_cancel_cb, transfer);
++      return;
++    }
++
+   switch (transfer->type)
+     {
+     case FP_TRANSFER_BULK:

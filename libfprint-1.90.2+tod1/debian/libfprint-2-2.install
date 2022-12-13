@@ -1,0 +1,2 @@
+lib/udev/rules.d/
+usr/lib/*/libfprint-[0-9].so.*

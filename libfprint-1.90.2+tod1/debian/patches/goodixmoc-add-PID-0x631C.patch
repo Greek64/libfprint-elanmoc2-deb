@@ -1,0 +1,28 @@
+From: mahaosen <mahaosen@goodix.com>
+Date: Sat, 13 Aug 2022 17:28:37 +0800
+Subject: goodixmoc: add PID 0x631C
+
+---
+ libfprint/drivers/goodixmoc/goodix.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix.c b/libfprint/drivers/goodixmoc/goodix.c
+index d4fa432..0daf31d 100644
+--- a/libfprint/drivers/goodixmoc/goodix.c
++++ b/libfprint/drivers/goodixmoc/goodix.c
+@@ -1308,6 +1308,7 @@ gx_fp_probe (FpDevice *device)
+     case 0x60A2:
+     case 0x609C:
+     case 0x634C:
++    case 0x631C:
+     case 0x639C:
+     case 0x63AC:
+     case 0x63BC:
+@@ -1530,6 +1531,7 @@ static const FpIdEntry id_table[] = {
+   { .vid = 0x27c6,  .pid = 0x609C,  },
+   { .vid = 0x27c6,  .pid = 0x60A2,  },
+   { .vid = 0x27c6,  .pid = 0x634C,  },
++  { .vid = 0x27c6,  .pid = 0x631C,  },
+   { .vid = 0x27c6,  .pid = 0x639C,  },
+   { .vid = 0x27c6,  .pid = 0x63AC,  },
+   { .vid = 0x27c6,  .pid = 0x63BC,  },

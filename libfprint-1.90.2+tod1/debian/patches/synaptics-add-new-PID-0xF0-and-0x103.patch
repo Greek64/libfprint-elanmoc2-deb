@@ -1,0 +1,21 @@
+From: Aris Lin <Aris.Lin@synaptics.com>
+Date: Wed, 5 May 2021 15:11:21 +0800
+Subject: [PATCH] synaptics: add new PID 0xF0 and 0x103
+
+---
+ libfprint/drivers/synaptics/synaptics.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libfprint/drivers/synaptics/synaptics.c b/libfprint/drivers/synaptics/synaptics.c
+index b1a35f3..4293d48 100644
+--- a/libfprint/drivers/synaptics/synaptics.c
++++ b/libfprint/drivers/synaptics/synaptics.c
+@@ -36,6 +36,8 @@ static const FpIdEntry id_table[] = {
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00C2,  },
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00C9,  },
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x0100,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x00F0,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0x0103,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

@@ -1,0 +1,40 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Wed, 9 Dec 2020 10:55:52 +0100
+Subject: device: Fix memory management of gallery passed to identify
+
+We cannot make any assumptions about the passed GPtrArray. As such, we
+must copy the content and grab our own reference for each of the prints.
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/91ee03e
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1908107
+---
+ libfprint/fp-device.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/libfprint/fp-device.c b/libfprint/fp-device.c
+index 1e61447..08b8944 100644
+--- a/libfprint/fp-device.c
++++ b/libfprint/fp-device.c
+@@ -936,6 +936,7 @@ fp_device_identify (FpDevice           *device,
+   g_autoptr(GTask) task = NULL;
+   FpDevicePrivate *priv = fp_device_get_instance_private (device);
+   FpMatchData *data;
++  int i;
+ 
+   task = g_task_new (device, cancellable, callback, user_data);
+   if (g_task_return_error_if_cancelled (task))
+@@ -960,7 +961,13 @@ fp_device_identify (FpDevice           *device,
+   maybe_cancel_on_cancelled (device, cancellable);
+ 
+   data = g_new0 (FpMatchData, 1);
+-  data->gallery = g_ptr_array_ref (prints);
++  /* We cannot store the gallery directly, because the ptr array may not own
++   * a reference to each print. Also, the caller could in principle modify the
++   * GPtrArray afterwards.
++   */
++  data->gallery = g_ptr_array_new_full (prints->len, g_object_unref);
++  for (i = 0; i < prints->len; i++)
++    g_ptr_array_add (data->gallery, g_object_ref (g_ptr_array_index (prints, i)));
+   data->match_cb = match_cb;
+   data->match_data = match_data;
+   data->match_destroy = match_destroy;

@@ -1,0 +1,21 @@
+From: weilei <weilei@goodix.com>
+Date: Thu, 4 Feb 2021 11:31:10 +0800
+Subject: goodixmoc:Add new PID
+
+Add PID 6594 used by LENOVO
+---
+ libfprint/drivers/goodixmoc/goodix.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix.c b/libfprint/drivers/goodixmoc/goodix.c
+index 41d5f94..5b538a8 100644
+--- a/libfprint/drivers/goodixmoc/goodix.c
++++ b/libfprint/drivers/goodixmoc/goodix.c
+@@ -1540,6 +1540,7 @@ static const FpIdEntry id_table[] = {
+   { .vid = 0x27c6,  .pid = 0x60A2,  },
+   { .vid = 0x27c6,  .pid = 0x63AC,  },
+   { .vid = 0x27c6,  .pid = 0x639C,  },
++  { .vid = 0x27c6,  .pid = 0x6594,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

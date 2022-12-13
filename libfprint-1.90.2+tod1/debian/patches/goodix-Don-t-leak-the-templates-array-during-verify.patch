@@ -1,0 +1,44 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Mon, 7 Dec 2020 21:22:10 +0100
+Subject: goodix: Don't leak the templates array during verify
+
+When verifying we initialize a temporary templates array but we never
+release it.
+---
+ libfprint/drivers/goodixmoc/goodix.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix.c b/libfprint/drivers/goodixmoc/goodix.c
+index 6a51cb8..bb0368b 100644
+--- a/libfprint/drivers/goodixmoc/goodix.c
++++ b/libfprint/drivers/goodixmoc/goodix.c
+@@ -350,9 +350,9 @@ fp_verify_cb (FpiDeviceGoodixMoc  *self,
+               gxfp_cmd_response_t *resp,
+               GError              *error)
+ {
++  g_autoptr(GPtrArray) templates = NULL;
+   FpDevice *device = FP_DEVICE (self);
+   FpPrint *print = NULL;
+-  GPtrArray *templates = NULL;
+   gint cnt = 0;
+   gboolean find = false;
+ 
+@@ -365,15 +365,14 @@ fp_verify_cb (FpiDeviceGoodixMoc  *self,
+     {
+       if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_VERIFY)
+         {
+-
+-          templates = g_ptr_array_new_with_free_func (g_object_unref);
++          templates = g_ptr_array_sized_new (1);
+           fpi_device_get_verify_data (device, &print);
+-          g_ptr_array_add (templates, g_object_ref_sink (print));
+-
++          g_ptr_array_add (templates, print);
+         }
+       else
+         {
+           fpi_device_get_identify_data (device, &templates);
++          g_ptr_array_ref (templates);
+         }
+       for (cnt = 0; cnt < templates->len; cnt++)
+         {

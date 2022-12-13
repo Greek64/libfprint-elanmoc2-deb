@@ -1,0 +1,23 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Wed, 15 Sep 2021 15:54:25 +0200
+Subject: elanmoc: Fix warning
+
+Really, it shouldn't matter, as there is no return. But adding the NULL
+initializer does not harm either.
+---
+ libfprint/drivers/elanmoc/elanmoc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libfprint/drivers/elanmoc/elanmoc.c b/libfprint/drivers/elanmoc/elanmoc.c
+index 196afaa..4d3df01 100644
+--- a/libfprint/drivers/elanmoc/elanmoc.c
++++ b/libfprint/drivers/elanmoc/elanmoc.c
+@@ -807,7 +807,7 @@ elanmoc_enroll (FpDevice *device)
+   FpPrint *print = NULL;
+   GVariant *data = NULL;
+   GVariant *uid = NULL;
+-  g_autofree gchar *user_id;
++  g_autofree gchar *user_id = NULL;
+   gsize user_id_len;
+   guint8 *userdata = g_malloc0 (ELAN_USERDATE_SIZE);
+ 

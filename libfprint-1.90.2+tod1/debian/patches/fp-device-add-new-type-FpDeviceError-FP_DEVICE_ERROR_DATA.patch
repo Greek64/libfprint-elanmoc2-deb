@@ -1,0 +1,45 @@
+From: "boger.wang" <boger@goodix.com>
+Date: Mon, 8 Jun 2020 21:47:32 +0800
+Subject: fp-device: add new type FpDeviceError
+  FP_DEVICE_ERROR_DATA_DUPLICATE
+
+---
+ libfprint/fp-device.h  | 2 ++
+ libfprint/fpi-device.c | 4 ++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/libfprint/fp-device.h b/libfprint/fp-device.h
+index 5c435fd..0be64ec 100644
+--- a/libfprint/fp-device.h
++++ b/libfprint/fp-device.h
+@@ -90,6 +90,7 @@ typedef enum {
+  * @FP_DEVICE_ERROR_DATA_INVALID: The passed data is invalid
+  * @FP_DEVICE_ERROR_DATA_NOT_FOUND: Requested print was not found on device
+  * @FP_DEVICE_ERROR_DATA_FULL: No space on device available for operation
++ * @FP_DEVICE_ERROR_DATA_DUPLICATE: Enrolling template duplicates storaged templates
+  *
+  * Error codes for device operations. More specific errors from other domains
+  * such as #G_IO_ERROR or #G_USB_DEVICE_ERROR may also be reported.
+@@ -104,6 +105,7 @@ typedef enum {
+   FP_DEVICE_ERROR_DATA_INVALID,
+   FP_DEVICE_ERROR_DATA_NOT_FOUND,
+   FP_DEVICE_ERROR_DATA_FULL,
++  FP_DEVICE_ERROR_DATA_DUPLICATE,
+ } FpDeviceError;
+ 
+ GQuark fp_device_retry_quark (void);
+diff --git a/libfprint/fpi-device.c b/libfprint/fpi-device.c
+index 7c1c851..daa7eba 100644
+--- a/libfprint/fpi-device.c
++++ b/libfprint/fpi-device.c
+@@ -135,6 +135,10 @@ fpi_device_error_new (FpDeviceError error)
+       msg = "Print was not found on the devices storage.";
+       break;
+ 
++    case FP_DEVICE_ERROR_DATA_DUPLICATE:
++      msg = "This finger has already enrolled, please try a different finger";
++      break;
++
+     default:
+       g_warning ("Unsupported error, returning general error instead!");
+       error = FP_DEVICE_ERROR_GENERAL;

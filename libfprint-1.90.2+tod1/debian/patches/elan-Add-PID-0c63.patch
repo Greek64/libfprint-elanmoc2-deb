@@ -1,0 +1,23 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Wed, 28 Apr 2021 15:47:18 +0200
+Subject: elan: Add PID 0c63
+
+Users are reporting that the sensor works fine.
+
+Closes: #357
+---
+ libfprint/drivers/elan.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libfprint/drivers/elan.h b/libfprint/drivers/elan.h
+index b99ff93..7eba522 100644
+--- a/libfprint/drivers/elan.h
++++ b/libfprint/drivers/elan.h
+@@ -214,6 +214,7 @@ static const FpIdEntry elan_id_table[] = {
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c42, .driver_data = ELAN_0C42},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c4d, .driver_data = ELAN_ALL_DEV},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c4f, .driver_data = ELAN_ALL_DEV},
++  {.vid = ELAN_VEND_ID,  .pid = 0x0c63, .driver_data = ELAN_ALL_DEV},
+   {.vid = 0,  .pid = 0,  .driver_data = 0},
+ };
+ 

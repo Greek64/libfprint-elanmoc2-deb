@@ -1,0 +1,4 @@
+usr/include/libfprint-[0-9]/*.h
+usr/lib/*/libfprint-[0-9].so
+usr/lib/*/pkgconfig/libfprint-[0-9].pc
+usr/share/gir-1.0/*

@@ -1,0 +1,20 @@
+From: Liran Piade <liranpiade@gmail.com>
+Date: Mon, 5 Jul 2021 14:18:42 +0000
+Subject: Added ELAN 0c6e (from ROG Flow X13)
+
+---
+ libfprint/drivers/elan.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libfprint/drivers/elan.h b/libfprint/drivers/elan.h
+index 7eba522..bb0990c 100644
+--- a/libfprint/drivers/elan.h
++++ b/libfprint/drivers/elan.h
+@@ -215,6 +215,7 @@ static const FpIdEntry elan_id_table[] = {
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c4d, .driver_data = ELAN_ALL_DEV},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c4f, .driver_data = ELAN_ALL_DEV},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c63, .driver_data = ELAN_ALL_DEV},
++  {.vid = ELAN_VEND_ID,  .pid = 0x0c6e, .driver_data = ELAN_ALL_DEV},
+   {.vid = 0,  .pid = 0,  .driver_data = 0},
+ };
+ 

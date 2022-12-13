@@ -1,0 +1,24 @@
+From: Vincent Huang <vincent.huang@tw.synaptics.com>
+Date: Fri, 31 Jul 2020 09:47:35 +0800
+Subject: synaptics: support sensors pid 0xe9 & 0xdf
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/8b64312f4b
+Bug-Ubuntu: https://bugs.launchpad.net/oem-priority/+bug/1893719
+---
+ libfprint/drivers/synaptics/synaptics.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libfprint/drivers/synaptics/synaptics.c b/libfprint/drivers/synaptics/synaptics.c
+index 25ae162..9fde846 100644
+--- a/libfprint/drivers/synaptics/synaptics.c
++++ b/libfprint/drivers/synaptics/synaptics.c
+@@ -29,7 +29,8 @@ G_DEFINE_TYPE (FpiDeviceSynaptics, fpi_device_synaptics, FP_TYPE_DEVICE)
+ 
+ static const FpIdEntry id_table[] = {
+   { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xBD,  },
+-
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xE9,  },
++  { .vid = SYNAPTICS_VENDOR_ID,  .pid = 0xDF,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

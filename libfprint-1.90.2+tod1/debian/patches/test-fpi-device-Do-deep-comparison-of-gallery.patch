@@ -1,0 +1,67 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Wed, 9 Dec 2020 11:43:17 +0100
+Subject: test-fpi-device: Do deep comparison of gallery
+
+The gallery needs to be copied, as such we must do a deep comparison
+instead of comparing the pointers. We also can't do the comparison
+afterwards, as the gallery is owned by the operation and that operation
+is finished already.
+
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/28ba6a0
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1908107
+---
+ tests/test-fpi-device.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/tests/test-fpi-device.c b/tests/test-fpi-device.c
+index 82baafc..66dbb64 100644
+--- a/tests/test-fpi-device.c
++++ b/tests/test-fpi-device.c
+@@ -739,10 +739,11 @@ test_driver_enroll_progress (void)
+ 
+ typedef struct
+ {
+-  gboolean called;
+-  FpPrint *match;
+-  FpPrint *print;
+-  GError  *error;
++  gboolean   called;
++  FpPrint   *match;
++  FpPrint   *print;
++  GPtrArray *gallery;
++  GError    *error;
+ } MatchCbData;
+ 
+ static void
+@@ -785,6 +786,14 @@ test_driver_match_cb (FpDevice *device,
+ 
+   if (match)
+     g_assert_no_error (error);
++
++  /* Compar gallery if this is an identify operation */
++  if (data->gallery)
++    {
++      FpiDeviceFake *fake_dev = FPI_DEVICE_FAKE (device);
++      g_assert_false (fake_dev->action_data == data->gallery);
++      assert_equal_galleries (fake_dev->action_data, data->gallery);
++    }
+ }
+ 
+ static void
+@@ -1160,6 +1169,8 @@ test_driver_identify (void)
+ 
+   g_assert_true (fp_device_supports_identify (device));
+ 
++  match_data->gallery = prints;
++
+   fake_dev->ret_print = fp_print_new (device);
+   fp_device_identify_sync (device, prints, NULL,
+                            test_driver_match_cb, match_data,
+@@ -1171,7 +1182,6 @@ test_driver_identify (void)
+   g_assert_true (match_data->print == print);
+ 
+   g_assert (fake_dev->last_called_function == dev_class->identify);
+-  g_assert (fake_dev->action_data == prints);
+   g_assert_no_error (error);
+ 
+   g_assert (print != NULL && print == fake_dev->ret_print);

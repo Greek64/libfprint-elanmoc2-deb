@@ -1,0 +1,25 @@
+From: hermanlin <herman.lin@emc.com.tw>
+Date: Tue, 10 Aug 2021 16:40:03 +0800
+Subject: elanmoc: Fix the identify/verify error reporting in
+ identify_status_report
+
+---
+ libfprint/drivers/elanmoc/elanmoc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/libfprint/drivers/elanmoc/elanmoc.c b/libfprint/drivers/elanmoc/elanmoc.c
+index 846d32f..196afaa 100644
+--- a/libfprint/drivers/elanmoc/elanmoc.c
++++ b/libfprint/drivers/elanmoc/elanmoc.c
+@@ -690,7 +690,10 @@ identify_status_report (FpiDeviceElanmoc *self, int verify_status_id,
+ 
+   if (error)
+     {
+-      fpi_device_enroll_complete (device, NULL, error);
++      if (fpi_device_get_current_action (device) == FPI_DEVICE_ACTION_VERIFY)
++        fpi_device_verify_complete (device, error);
++      else
++        fpi_device_identify_complete (device, error);
+       return;
+     }
+ 

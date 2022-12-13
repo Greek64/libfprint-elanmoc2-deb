@@ -1,0 +1,47 @@
+From: Benjamin Berg <bberg@redhat.com>
+Date: Mon, 25 Oct 2021 18:38:38 +0200
+Subject: goodixmoc: Fix template struct for required length calculation
+
+The length is only a single byte in the transfer. However, the struct
+had a uint32_t in that place, breaking the sizeof() calculation and
+seemingly creating issues for certain lengths of user id strings (which
+depend on the username).
+
+Fix this by changing the type to uint8_t. Also add the initial 0x43
+prefix byte and a byte of apparent padding that the struct contains.
+Leave the two reserved bytes at the end, as they seem to actually have a
+meaning (i.e. they are seemingly send in listings).
+
+This effectively makes the struct one byte smaller, bringing it down to
+127 bytes from 128 bytes.
+
+Closes: #428, #404
+
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1945296
+---
+ libfprint/drivers/goodixmoc/goodix_proto.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix_proto.h b/libfprint/drivers/goodixmoc/goodix_proto.h
+index bcd1cdd..000be2f 100644
+--- a/libfprint/drivers/goodixmoc/goodix_proto.h
++++ b/libfprint/drivers/goodixmoc/goodix_proto.h
+@@ -113,14 +113,16 @@ typedef struct _gxfp_enroll_init
+ #pragma pack(push, 1)
+ typedef struct _template_format
+ {
++  uint8_t _0x43_byte;
+   uint8_t type;
+   uint8_t finger_index;
++  uint8_t pad0;
+   uint8_t accountid[32];
+   uint8_t tid[32];
+   struct
+   {
+-    uint32_t size;
+-    uint8_t  data[56];
++    uint8_t size;
++    uint8_t data[56];
+   } payload;
+   uint8_t reserve[2];
+ } template_format_t, *ptemplate_format_t;

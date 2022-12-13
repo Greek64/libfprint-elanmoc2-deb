@@ -1,0 +1,115 @@
+From: fengqiangguo <fengjungle@126.com>
+Date: Thu, 10 Dec 2020 23:12:38 +0800
+Subject: goodixmoc: fetch max_stored_prints from device
+
+During updating configuration, device will send back the max_stored_prints
+back. The number of max_stored_prints is different among different devices.
+---
+ libfprint/drivers/goodixmoc/goodix.c       | 12 +++++++++++-
+ libfprint/drivers/goodixmoc/goodix_proto.c |  8 +++++++-
+ libfprint/drivers/goodixmoc/goodix_proto.h |  8 +++++++-
+ 3 files changed, 25 insertions(+), 3 deletions(-)
+
+diff --git a/libfprint/drivers/goodixmoc/goodix.c b/libfprint/drivers/goodixmoc/goodix.c
+index 5148553..e532721 100644
+--- a/libfprint/drivers/goodixmoc/goodix.c
++++ b/libfprint/drivers/goodixmoc/goodix.c
+@@ -53,6 +53,7 @@ struct _FpiDeviceGoodixMoc
+   pgxfp_sensor_cfg_t sensorcfg;
+   gint               enroll_stage;
+   gint               max_enroll_stage;
++  gint               max_stored_prints;
+   GCancellable      *cancellable;
+   GPtrArray         *list_result;
+   guint8             template_id[TEMPLATE_ID_SIZE];
+@@ -560,6 +561,13 @@ fp_enroll_enum_cb (FpiDeviceGoodixMoc  *self,
+                                                      resp->result));
+       return;
+     }
++  if (resp->finger_list_resp.finger_num >= self->max_stored_prints)
++    {
++      fpi_ssm_mark_failed (self->task_ssm,
++                           fpi_device_error_new (FP_DEVICE_ERROR_DATA_FULL));
++      return;
++    }
++
+   fpi_ssm_jump_to_state (self->task_ssm, FP_ENROLL_CAPTURE);
+ }
+ 
+@@ -975,7 +983,7 @@ fp_init_config_cb (FpiDeviceGoodixMoc  *self,
+       fpi_ssm_mark_failed (self->task_ssm, error);
+       return;
+     }
+-
++  self->max_stored_prints = resp->finger_config.max_stored_prints;
+   fpi_ssm_next_state (self->task_ssm);
+ }
+ 
+@@ -1259,6 +1267,8 @@ gx_fp_init (FpDevice *device)
+   GError *error = NULL;
+   int ret = 0;
+ 
++  self->max_stored_prints = FP_MAX_FINGERNUM;
++
+   self->cancellable = g_cancellable_new ();
+ 
+   self->sensorcfg = g_new0 (gxfp_sensor_cfg_t, 1);
+diff --git a/libfprint/drivers/goodixmoc/goodix_proto.c b/libfprint/drivers/goodixmoc/goodix_proto.c
+index ece8123..e30d23d 100644
+--- a/libfprint/drivers/goodixmoc/goodix_proto.c
++++ b/libfprint/drivers/goodixmoc/goodix_proto.c
+@@ -294,6 +294,12 @@ gx_proto_parse_body (uint16_t cmd, uint8_t *buffer, uint32_t buffer_len, pgxfp_c
+       break;
+ 
+     case MOC_CMD0_UPDATE_CONFIG:
++      {
++        presp->finger_config.status = buffer[0];
++        presp->finger_config.max_stored_prints = buffer[2];
++      }
++      break;
++
+     case MOC_CMD0_COMMITENROLLMENT:
+     case MOC_CMD0_DELETETEMPLATE:
+       break;
+@@ -411,7 +417,7 @@ gx_proto_init_sensor_config (pgxfp_sensor_cfg_t pconfig)
+   memset (pconfig, 0, sizeof (*pconfig));
+ 
+   //NOTICE: Do not change any value!
+-  memcpy (&pconfig->config, sensor_config, 26);
++  memcpy (&pconfig->config, sensor_config, G_N_ELEMENTS (sensor_config));
+   pconfig->reserved[0] = 1;
+ 
+   gx_proto_crc32_calc ((uint8_t *) pconfig, sizeof (*pconfig) - PACKAGE_CRC_SIZE, (uint8_t *) &crc32_calc);
+diff --git a/libfprint/drivers/goodixmoc/goodix_proto.h b/libfprint/drivers/goodixmoc/goodix_proto.h
+index 1611a60..53eea04 100644
+--- a/libfprint/drivers/goodixmoc/goodix_proto.h
++++ b/libfprint/drivers/goodixmoc/goodix_proto.h
+@@ -25,7 +25,7 @@
+ #define PACKAGE_CRC_SIZE (4)
+ #define PACKAGE_HEADER_SIZE (8)
+ 
+-#define FP_MAX_FINGERNUM (10)
++#define FP_MAX_FINGERNUM (20)
+ 
+ #define TEMPLATE_ID_SIZE (32)
+ 
+@@ -167,6 +167,11 @@ typedef struct _fp_finger_status
+   uint8_t status;
+ } fp_finger_status_t, *pfp_finger_status_t;
+ 
++typedef struct _fp_finger_config
++{
++  uint8_t status;
++  uint8_t max_stored_prints;
++} fp_finger_config_t, *pfp_finger_config_t;
+ 
+ typedef struct _fp_cmd_response
+ {
+@@ -183,6 +188,7 @@ typedef struct _fp_cmd_response
+     gxfp_enum_fingerlist_t finger_list_resp;
+     gxfp_version_info_t    version_info;
+     fp_finger_status_t     finger_status;
++    fp_finger_config_t     finger_config;
+   };
+ } gxfp_cmd_response_t, *pgxfp_cmd_response_t;
+ 

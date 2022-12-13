@@ -1,0 +1,30 @@
+#!/usr/bin/make -f
+
+export DPKG_GENSYMBOLS_CHECK_LEVEL = 2
+
+# Configuration arguments
+CONFIG_ARGS = -Dudev_rules_dir=/lib/udev/rules.d -Dgtk-examples=false
+
+%:
+	dh $@ --with gir
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(CONFIG_ARGS)
+
+override_dh_install:
+	mv debian/tmp/lib/udev/rules.d/60-libfprint-2-autosuspend.rules \
+		debian/tmp/lib/udev/rules.d/60-libfprint-2.rules
+	sed -i '/^Requires.private\|^Libs.private/ d' \
+		debian/tmp/usr/lib/*/pkgconfig/libfprint-2.pc
+	dh_install
+
+override_dh_auto_test:
+	# don't fail build on s390x, some tests are failing but upstream
+	# isn't interested in spending energy on this at the moment
+	# see https://gitlab.freedesktop.org/libfprint/libfprint/issues/236
+ifneq (,$(filter $(DEB_HOST_ARCH),s390x))
+	dh_auto_test || true
+else
+	dh_auto_test
+endif
+

@@ -1,0 +1,27 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Mon, 30 Nov 2020 20:03:32 +0100
+Subject: list-udev-rules: Remove Wrongly added well-known USB controller
+ vid/pid comboj
+
+This was causing USB controllers to use power-saving mode, breaking usb
+devices usage.
+
+Related to: https://gitlab.freedesktop.org/libfprint/libfprint/-/issues/327
+Origin: https://gitlab.freedesktop.org/libfprint/libfprint/-/commit/2b7cfa75
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/libfprint/+bug/1906296
+---
+ libfprint/fprint-list-udev-rules.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/libfprint/fprint-list-udev-rules.c b/libfprint/fprint-list-udev-rules.c
+index aee13e4..183cfa5 100644
+--- a/libfprint/fprint-list-udev-rules.c
++++ b/libfprint/fprint-list-udev-rules.c
+@@ -76,7 +76,6 @@ static const FpIdEntry whitelist_id_table[] = {
+   { .vid = 0x1c7a, .pid = 0x0300 },
+   { .vid = 0x1c7a, .pid = 0x0570 },
+   { .vid = 0x1c7a, .pid = 0x0575 },
+-  { .vid = 0x1d6b, .pid = 0x0002 },
+   { .vid = 0x27c6, .pid = 0x5042 },
+   { .vid = 0x27c6, .pid = 0x5110 },
+   { .vid = 0x27c6, .pid = 0x5117 },

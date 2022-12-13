@@ -1,0 +1,20 @@
+From: mozgovoy <mozgovoy@playkot.com>
+Date: Thu, 29 Jul 2021 20:40:07 +0300
+Subject: elan: Add PID 0x0c58
+
+---
+ libfprint/drivers/elan.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libfprint/drivers/elan.h b/libfprint/drivers/elan.h
+index bb0990c..b463940 100644
+--- a/libfprint/drivers/elan.h
++++ b/libfprint/drivers/elan.h
+@@ -216,6 +216,7 @@ static const FpIdEntry elan_id_table[] = {
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c4f, .driver_data = ELAN_ALL_DEV},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c63, .driver_data = ELAN_ALL_DEV},
+   {.vid = ELAN_VEND_ID,  .pid = 0x0c6e, .driver_data = ELAN_ALL_DEV},
++  {.vid = ELAN_VEND_ID,  .pid = 0x0c58, .driver_data = ELAN_ALL_DEV},
+   {.vid = 0,  .pid = 0,  .driver_data = 0},
+ };
+ 

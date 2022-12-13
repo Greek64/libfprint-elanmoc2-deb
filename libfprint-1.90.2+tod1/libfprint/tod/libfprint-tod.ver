@@ -1,0 +1,6 @@
+LIBFPRINT_TOD_1.0.0 {
+global:
+	fpi_*;
+local:
+    *;
+};
