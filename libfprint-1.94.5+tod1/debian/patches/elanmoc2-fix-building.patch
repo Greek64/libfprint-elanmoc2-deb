@@ -1,0 +1,39 @@
+Index: libfprint-1.94.5+tod1/libfprint/fprint-list-udev-hwdb.c
+===================================================================
+--- libfprint-1.94.5+tod1.orig/libfprint/fprint-list-udev-hwdb.c
++++ libfprint-1.94.5+tod1/libfprint/fprint-list-udev-hwdb.c
+@@ -31,8 +31,6 @@ static const FpIdEntry whitelist_id_tabl
+    */
+   { .vid = 0x04e8, .pid = 0x730b },
+   { .vid = 0x04f3, .pid = 0x036b },
+-  { .vid = 0x04f3, .pid = 0x0c00 },
+-  { .vid = 0x04f3, .pid = 0x0c4c },
+   { .vid = 0x04f3, .pid = 0x0c57 },
+   { .vid = 0x04f3, .pid = 0x0c5e },
+   { .vid = 0x04f3, .pid = 0x0c5a },
+Index: libfprint-1.94.5+tod1/data/autosuspend.hwdb
+===================================================================
+--- libfprint-1.94.5+tod1.orig/data/autosuspend.hwdb
++++ libfprint-1.94.5+tod1/data/autosuspend.hwdb
+@@ -152,6 +152,12 @@ usb:v04F3p0C8D*
+  ID_AUTOSUSPEND=1
+  ID_PERSIST=0
+ 
++# Supported by libfprint driver elanmoc2
++usb:v04F3p0C4C*
++usb:v04F3p0C00*
++ ID_AUTOSUSPEND=1
++ ID_PERSIST=0
++
+ # Supported by libfprint driver etes603
+ usb:v1C7Ap0603*
+  ID_AUTOSUSPEND=1
+@@ -280,8 +286,6 @@ usb:v138Ap0091*
+ # Known unsupported devices
+ usb:v04E8p730B*
+ usb:v04F3p036B*
+-usb:v04F3p0C00*
+-usb:v04F3p0C4C*
+ usb:v04F3p0C57*
+ usb:v04F3p0C5E*
+ usb:v04F3p0C5A*
