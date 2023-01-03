@@ -1,0 +1,149 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Sun, 17 Jul 2022 17:13:07 +0200
+Subject: tod: Add wrapper for goodix-tod not handling identification with no
+ prints
+
+Newer fprintd supports duplicate-detection, this implies sending to the
+device an empty prints gallery, expecting the device to give us a
+matched print against its storage.
+
+In case the device has no storage we're doing this anyway, but goodix
+doesn't handle this properly, so let's just ignore the case if no prints
+are passed.
+
+LP: #1966911
+---
+ libfprint/tod/meson.build          |  1 +
+ libfprint/tod/tod-goodix-wrapper.c | 56 ++++++++++++++++++++++++++++++++++++++
+ libfprint/tod/tod-goodix-wrapper.h | 24 ++++++++++++++++
+ libfprint/tod/tod-shared-loader.c  |  4 +++
+ 4 files changed, 85 insertions(+)
+ create mode 100644 libfprint/tod/tod-goodix-wrapper.c
+ create mode 100644 libfprint/tod/tod-goodix-wrapper.h
+
+diff --git a/libfprint/tod/meson.build b/libfprint/tod/meson.build
+index 10c49e4..f3ca0cf 100644
+--- a/libfprint/tod/meson.build
++++ b/libfprint/tod/meson.build
+@@ -19,6 +19,7 @@ mapfile = configure_file(input: 'libfprint-tod.ver.in',
+ libfprint_tod_private = static_library('fprint-tod-private',
+     sources: [
+         'tod-shared-loader.c',
++        'tod-goodix-wrapper.c',
+     ],
+     include_directories: include_directories('..'),
+     link_with: libfprint_private,
+diff --git a/libfprint/tod/tod-goodix-wrapper.c b/libfprint/tod/tod-goodix-wrapper.c
+new file mode 100644
+index 0000000..45a58cf
+--- /dev/null
++++ b/libfprint/tod/tod-goodix-wrapper.c
+@@ -0,0 +1,56 @@
++/*
++ * Shared library loader for libfprint
++ * Copyright (C) 2022 Marco Trevisan <marco.trevisan@canonical.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include "fp-device-private.h"
++#include "fpi-device.h"
++#define FP_COMPONENT "tod"
++
++#include "tod-goodix-wrapper.h"
++
++static void (*goodix_moc_identify) (FpDevice *) = NULL;
++
++static void
++goodix_tod_identify_wrapper (FpDevice *device)
++{
++  GPtrArray *prints;
++
++  fpi_device_get_identify_data (device, &prints);
++
++  if (prints->len)
++    return goodix_moc_identify (device);
++
++  g_warning ("%s does not support identify with empty gallery, let's skip it",
++             fp_device_get_name (device));
++
++  fpi_device_identify_report (device, NULL, NULL, NULL);
++  fpi_device_identify_complete (device, NULL);
++}
++
++void
++goodix_tod_wrapper_init (FpDeviceClass *device_class)
++{
++  g_assert (g_strcmp0 (device_class->id, "goodix-tod") == 0);
++  g_assert (goodix_moc_identify == NULL);
++
++  g_message ("Creating TOD wrapper for %s (%s) driver",
++             device_class->id, device_class->full_name);
++
++  goodix_moc_identify = device_class->identify;
++  device_class->identify = goodix_tod_identify_wrapper;
++}
+diff --git a/libfprint/tod/tod-goodix-wrapper.h b/libfprint/tod/tod-goodix-wrapper.h
+new file mode 100644
+index 0000000..802e696
+--- /dev/null
++++ b/libfprint/tod/tod-goodix-wrapper.h
+@@ -0,0 +1,24 @@
++/*
++ * Shared library loader for libfprint
++ * Copyright (C) 2022 Marco Trevisan <marco.trevisan@canonical.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#pragma once
++
++#include "drivers_api.h"
++
++void goodix_tod_wrapper_init (FpDeviceClass *device_class);
+diff --git a/libfprint/tod/tod-shared-loader.c b/libfprint/tod/tod-shared-loader.c
+index d214aeb..fc18b6d 100644
+--- a/libfprint/tod/tod-shared-loader.c
++++ b/libfprint/tod/tod-shared-loader.c
+@@ -22,6 +22,7 @@
+ #include <gmodule.h>
+ 
+ #include "tod-shared-loader.h"
++#include "tod-goodix-wrapper.h"
+ #include "fpi-device.h"
+ #include "fpi-log.h"
+ #include "tod-config.h"
+@@ -131,6 +132,9 @@ fpi_tod_shared_drivers_register (void)
+         {
+           g_debug ("Initializing features for driver %s", cls->id);
+           fpi_device_class_auto_initialize_features (cls);
++
++          if (g_strcmp0 (cls->id, "goodix-tod") == 0)
++            goodix_tod_wrapper_init (cls);
+         }
+ 
+       shared_modules = g_list_prepend (shared_modules,

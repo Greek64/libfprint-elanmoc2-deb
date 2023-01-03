@@ -1,0 +1,48 @@
+From: =?utf-8?b?Ik1hcmNvIFRyZXZpc2FuIChUcmV2acOxbyki?= <mail@3v1n0.net>
+Date: Sun, 17 Jul 2022 17:16:11 +0200
+Subject: fpi-device: Avoid using device action strings
+
+It may cause initializing a type twice in some cases, and thus some
+hard-locking, let's just avoid it since we don't care about full debug
+strings here.
+
+LP: #1966911
+---
+ libfprint/fpi-device.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/libfprint/fpi-device.c b/libfprint/fpi-device.c
+index 89504da..7efdfe5 100644
+--- a/libfprint/fpi-device.c
++++ b/libfprint/fpi-device.c
+@@ -747,11 +747,8 @@ fpi_device_action_error (FpDevice *device,
+ 
+   if (error != NULL)
+     {
+-      g_autofree char *action_str = NULL;
+-
+-      action_str = g_enum_to_string (FPI_TYPE_DEVICE_ACTION, priv->current_action);
+-      g_debug ("Device reported generic error (%s) during action; action was: %s",
+-               error->message, action_str);
++      g_debug ("Device reported generic error (%s) during action; action was: %d",
++               error->message, priv->current_action);
+     }
+   else
+     {
+@@ -965,15 +962,13 @@ fp_device_task_return_in_idle_cb (gpointer user_data)
+ {
+   FpDeviceTaskReturnData *data = user_data;
+   FpDevicePrivate *priv = fp_device_get_instance_private (data->device);
+-  g_autofree char *action_str = NULL;
+   FpiDeviceAction action;
+ 
+   g_autoptr(GTask) task = NULL;
+   g_autoptr(GError) cancellation_reason = NULL;
+ 
+ 
+-  action_str = g_enum_to_string (FPI_TYPE_DEVICE_ACTION, priv->current_action);
+-  g_debug ("Completing action %s in idle!", action_str);
++  g_debug ("Completing action %d in idle!", priv->current_action);
+ 
+   task = g_steal_pointer (&priv->current_task);
+   action = priv->current_action;

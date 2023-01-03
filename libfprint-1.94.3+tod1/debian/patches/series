@@ -1,0 +1,6 @@
+tod-Add-wrapper-for-goodix-tod-not-handling-identificatio.patch
+fpi-device-Avoid-using-device-action-strings.patch
+elanmoc-add-PID-0x0c88.patch
+elanmoc-Make-sure-sensor-in-the-right-mode-at-identity.patch
+goodixmoc-add-PID-0x631C.patch
+goodixmoc-add-PID-0x634C.patch

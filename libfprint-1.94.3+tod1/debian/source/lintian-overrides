@@ -1,0 +1,3 @@
+# This TOD driver binary is built using sources inside this package
+# but at previous version, see tests/tod-drivers/README.md for more information
+libfprint source: source-is-missing tests/tod-drivers/tod-*

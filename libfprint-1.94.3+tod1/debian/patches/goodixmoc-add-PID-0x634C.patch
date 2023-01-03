@@ -1,0 +1,41 @@
+From: mahaosen <mahaosen@goodix.com>
+Date: Fri, 26 Aug 2022 16:46:16 +0800
+Subject: goodixmoc: add PID 0x634C
+
+---
+ data/autosuspend.hwdb                | 1 +
+ libfprint/drivers/goodixmoc/goodix.c | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/data/autosuspend.hwdb b/data/autosuspend.hwdb
+index 58280f3..359b185 100644
+--- a/data/autosuspend.hwdb
++++ b/data/autosuspend.hwdb
+@@ -158,6 +158,7 @@ usb:v27C6p5840*
+ usb:v27C6p609C*
+ usb:v27C6p60A2*
+ usb:v27C6p631C*
++usb:v27C6p634C*
+ usb:v27C6p639C*
+ usb:v27C6p63AC*
+ usb:v27C6p63BC*
+diff --git a/libfprint/drivers/goodixmoc/goodix.c b/libfprint/drivers/goodixmoc/goodix.c
+index 87b420f..2ce4f1c 100644
+--- a/libfprint/drivers/goodixmoc/goodix.c
++++ b/libfprint/drivers/goodixmoc/goodix.c
+@@ -1296,6 +1296,7 @@ gx_fp_probe (FpDevice *device)
+     case 0x60A2:
+     case 0x609C:
+     case 0x631C:
++    case 0x634C:
+     case 0x639C:
+     case 0x63AC:
+     case 0x63BC:
+@@ -1534,6 +1535,7 @@ static const FpIdEntry id_table[] = {
+   { .vid = 0x27c6,  .pid = 0x609C,  },
+   { .vid = 0x27c6,  .pid = 0x60A2,  },
+   { .vid = 0x27c6,  .pid = 0x631C,  },
++  { .vid = 0x27c6,  .pid = 0x634C,  },
+   { .vid = 0x27c6,  .pid = 0x639C,  },
+   { .vid = 0x27c6,  .pid = 0x63AC,  },
+   { .vid = 0x27c6,  .pid = 0x63BC,  },

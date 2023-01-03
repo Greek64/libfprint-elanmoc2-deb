@@ -1,0 +1,11 @@
+#WHITELIST APPROACH
+
+#Ignore Everything
+*
+
+#Whitelist Directories
+!*/
+
+#WHITELIST
+!.gitignore
+!/libfprint-1.94.3+tod1/**

@@ -1,0 +1,3 @@
+usr/include/libfprint-[0-9]/tod-[0-9]/*
+usr/lib/${DEB_HOST_MULTIARCH}/libfprint-[0-9]-tod.so
+usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig/libfprint-[0-9]-tod-[0-9].pc

@@ -1,0 +1,33 @@
+From: ArronYen <arron.yen@emc.com.tw>
+Date: Mon, 20 Jun 2022 14:03:05 +0800
+Subject: elanmoc: add PID 0x0c88
+
+---
+ data/autosuspend.hwdb               | 1 +
+ libfprint/drivers/elanmoc/elanmoc.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/data/autosuspend.hwdb b/data/autosuspend.hwdb
+index 91a14eb..10f60a2 100644
+--- a/data/autosuspend.hwdb
++++ b/data/autosuspend.hwdb
+@@ -144,6 +144,7 @@ usb:v04F3p0C58*
+ # Supported by libfprint driver elanmoc
+ usb:v04F3p0C7D*
+ usb:v04F3p0C7E*
++usb:v04F3p0C88*
+  ID_AUTOSUSPEND=1
+  ID_PERSIST=0
+ 
+diff --git a/libfprint/drivers/elanmoc/elanmoc.c b/libfprint/drivers/elanmoc/elanmoc.c
+index 69700a0..5825d3b 100644
+--- a/libfprint/drivers/elanmoc/elanmoc.c
++++ b/libfprint/drivers/elanmoc/elanmoc.c
+@@ -27,6 +27,7 @@ G_DEFINE_TYPE (FpiDeviceElanmoc, fpi_device_elanmoc, FP_TYPE_DEVICE)
+ static const FpIdEntry id_table[] = {
+   { .vid = 0x04f3,  .pid = 0x0c7d,  },
+   { .vid = 0x04f3,  .pid = 0x0c7e,  },
++  { .vid = 0x04f3,  .pid = 0x0c88,  },
+   { .vid = 0,  .pid = 0,  .driver_data = 0 },   /* terminating entry */
+ };
+ 

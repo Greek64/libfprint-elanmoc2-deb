@@ -1,0 +1,820 @@
+libfprint (1:1.94.3+tod1-0ubuntu2~22.04.03) jammy; urgency=medium
+
+  [ Andy Chi ]
+  * Add new goodix IDs (LP: #1990209 LP: #1989313)
+     - d/p/goodixmoc-add-PID-0x631C.patch
+     - d/p/goodixmoc-add-PID-0x634C.patch
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Mon, 21 Nov 2022 19:57:14 +0100
+
+libfprint (1:1.94.3+tod1-0ubuntu2~22.04.02) jammy; urgency=medium
+
+  [ Andy Chi ]
+  - Add support for latest elanmoc devices (LP: #1989314)
+    - d/p/elanmoc-add-PID-0x0c88.patch
+    - d/p/elanmoc-Make-sure-sensor-in-the-right-mode-at-identity.patch
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Mon, 24 Oct 2022 14:51:46 +0200
+
+libfprint (1:1.94.3+tod1-0ubuntu2~22.04.01) jammy; urgency=medium
+
+  * debian/patches: Ensure that identify works with old goodix driver
+    (LP: #1966911)
+  * debian: Update references to jammy branch
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Sun, 17 Jul 2022 17:39:59 +0200
+
+libfprint (1:1.94.3+tod1-0ubuntu1) jammy; urgency=medium
+
+  * New upstream release (LP: #1944369)
+  * debian/libfprint-2-2.postinst: Devices triggers updated
+  * debian/libfprint-2-tod1.symbols: Add new symbols
+  * debian/docs: Update README name to use markdown file
+  * tod: Ensure we install tod-macros.h header
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Sun, 27 Mar 2022 23:48:11 +0200
+
+libfprint (1:1.94.2+tod1-0ubuntu1) jammy; urgency=medium
+
+  * New upstream release (LP: #1950438)
+  * debian/libfprint-2-2.postinst: Devices triggers updated
+  * debian/patches: Drop, all applied upstream
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Tue, 14 Dec 2021 19:57:05 +0100
+
+libfprint (1:1.94.1+tod1-0ubuntu2) jammy; urgency=medium
+
+  * debian/patches: Ensure that structures padding is constant in all archs
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Sun, 31 Oct 2021 23:13:40 +0100
+
+libfprint (1:1.94.1+tod1-0ubuntu1) jammy; urgency=medium
+
+  * Merge common packaging bits with debian
+  * New TOD fork upstream release
+  * debian/libfprint-2-2.postinst: Devices triggers updated
+  * debian/source/lintian-overrides: Update for new TOD drivers paths
+  * debian/patches: Drop, all applied on the TOD upstream branch
+  * debian/libfprint-2-tod1.symbols: Update TOD symbols
+  * debian/libfprint-2-2.symbols: Remove virtual device symbols.
+    These were wrongly exported before and not really part of any public
+    API.
+  * debian/control: Depend libfprint-2-tod-dev on libgudev-1.0-dev
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 28 Oct 2021 20:32:43 +0200
+
+libfprint (1:1.94.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/libfprint-2-2.postinst: Devices triggers updated
+  * debian/patches: Remove all patches, they've been applied upstream
+  * debian/patches: Fix template struct in goodix drivers (LP: #1945296)
+  * debian/patches: Add support for new elan and goodix PIDs
+  * debian/libfprint-2-2.postinst: Update to match new PIDs
+  * debian: Build-depend on gudev-1, and set back rules dir.
+    This is needed for SPI devices
+  * debian/patches: Fix test device descriptors to get tests passing
+  * debian/libfprint-2-2.symbols: Add new symbols
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Wed, 27 Oct 2021 15:17:09 +0200
+
+libfprint (1:1.90.7-3) experimental; urgency=medium
+
+  * gbp.conf: Prepare for experimental branching
+  * debian/patches:
+    - Use hwdb to store device autosuspend rules and drop debian specifics.
+      Upstream will use an hwdb to store the device autosuspend (that will be
+      included in systemd also, so libfprint packagin may stop shipping it at
+      later point), so use it earlier.
+      Drop the debian specific rules to set the devices part of the `plugdev`
+      group as such devices should not be ever readable by an user, but the
+      access should be managed through a libfprint-based service (frpintd at
+      the date).
+    - Explicitly mark libfprint as a shared library
+  * libfprint-2-2.install: Install hwdb file
+  * debian/rules:
+    - Do not autorename upstream rules file anymore.
+      It's not there, while there's no point to rename the hwdb one.
+    - Manually set udev hwdb directory (was rules dir before)
+    - Don't remove the meson generated private values from pc file.
+      This is now generated correctly by upstream, so no need to drop anything
+      from it.
+  * debian: Generate postinst devices list automatically at gbp import phase.
+    Alternatively provide a script to keep the post-inst script updated
+  * debian/libfprint-2-2.postinst: Upgrade as per upstream hwdb.
+    Blacklisted devices can be now removed from the trigger list as we don't
+    add them to plugdev anymore.
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 21 Jan 2021 19:53:12 +0100
+
+libfprint (1:1.90.7+git20210222+tod1-0ubuntu4) jammy; urgency=medium
+
+  * debian/patches: Add support for new elan, goodix and synaptics drivers.
+    Most of the drivers only need to list new product IDs to work with new
+    devices, and including other changes that new devices may require.
+    (LP: #1945296, #1945298)
+  * debian/patches: Fix template struct in goodix drivers (LP: #1945296)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Tue, 26 Oct 2021 21:24:40 +0200
+
+libfprint (1:1.90.7+git20210222+tod1-0ubuntu3) impish; urgency=medium
+
+  * No-change rebuild to build packages with zstd compression.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 07 Oct 2021 12:15:26 +0200
+
+libfprint (1:1.90.7+git20210222+tod1-0ubuntu2) hirsute; urgency=medium
+
+  * Disable lto for now, failing test
+    ibfprint:unit-tests+tod+fake_test_dev_tod_current / fpi-device-tod-fake_test_dev_tod_current
+
+ -- Matthias Klose <doko@ubuntu.com>  Tue, 30 Mar 2021 15:01:02 +0200
+
+libfprint (1:1.90.7+git20210222+tod1-0ubuntu1) hirsute; urgency=medium
+
+  * New upstream TOD release
+  * Merge common packaging bits with debian
+  * debian/libfprint-2-2.postinst: Devices triggers updated
+  * debian/patches: Drop, they're all applied upstream
+  * debian/libfprint-2-2.symbols: Update symbols
+  * debian/update-udev-triggers.sh: Ignore udevadm trigger failures
+    (LP: #1909023)
+  * debian/libfprint-2-2.postinst: Regenerate as per generator changes
+    (LP: #1909023)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Mon, 22 Feb 2021 21:39:04 +0100
+
+libfprint (1:1.90.7-2) unstable; urgency=medium
+
+  * debian/patches: Skip udev rules tests when not all drivers are compiled
+  * debian/libfprint-2-2.postinst: Regenerate the udev list based on new IDs
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 21 Jan 2021 17:10:57 +0100
+
+libfprint (1:1.90.7-1) unstable; urgency=medium
+
+  * New upstream release:
+    - vfs5011: Fix possible use-after-free
+    - goodixmoc: Add two new PIDs (0x63AC, 0x639C)
+    - goodixmoc: Support finger status API
+    - synaptics: Only identify within provided prints
+    - synaptics: Reject devices with old firmware during probe (#239)
+  * debian/patches:
+    - Refresh, dropping merged
+    - Include upstream udev fixes and use hardcoded rules
+    - Ensure that umockdev tests will pass with libusb 1.0.24
+      (Closes: #977848, #978256)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 21 Jan 2021 13:38:59 +0100
+
+libfprint (1:1.90.6+tod1-0ubuntu2) hirsute; urgency=medium
+
+  * d/p/meson-Do-not-support-drivers-known-to-fail-in-Big-Endian-.patch:
+    - Do not enable drivers that are not supported by big endian archs
+      Upstream patch to only build drivers everywhere but not include them
+      in the supported list or test them
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 10 Dec 2020 21:37:13 +0100
+
+libfprint (1:1.90.6+tod1-0ubuntu1) hirsute; urgency=medium
+
+  * New upstream release
+    - fp_print_deserialize will now correctly return a sunken reference
+    - Object reference management fixes for FpPrint and identify
+    - Fixed issues that caused problem on non-x86 machines (#236)
+    - Fix building with older GLib versions
+    - synaptics: Support PID 00e7
+    - goodix: Fix issue with long USB packages
+  * Mark libfprint-2-doc as Multi-Arch: foreign
+  * debian/control: Remove Didier Raboud from uploaders
+  * debian/rules: sync with debian (no change)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 10 Dec 2020 17:26:27 +0100
+
+libfprint (1:1.90.6-2) unstable; urgency=medium
+
+  * d/p/meson-Do-not-support-drivers-known-to-fail-in-Big-Endian-.patch:
+    - Do not enable drivers that are not supported by big endian archs
+      Upstream patch to only build drivers everywhere but not include them
+      in the supported list or test them
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 10 Dec 2020 21:32:49 +0100
+
+libfprint (1:1.90.6-1) unstable; urgency=medium
+
+  * New upstream release:
+    - fp_print_deserialize will now correctly return a sunken reference
+    - Object reference management fixes for FpPrint and identify
+    - Fixed issues that caused problem on non-x86 machines (#236)
+    - Fix building with older GLib versions
+    - synaptics: Support PID 00e7
+    - goodix: Fix issue with long USB packages
+  * debian/control:
+    - Remove Didier Raboud from uploaders (as he requested via bigon).
+    - Mark libfprint-2-doc as Multi-Arch: foreign
+  * debian/rules:
+    - Ignore tests failures in s390x as it now builds and tests correctly
+    - Increase testing timeout.
+  * debian/{control,rules,*.install}:
+    - Switch to debhelper 13 and use its features.
+      As per this restrict more the .install files wilcards
+  * debian/gbp.conf: Include suggested settings by GNOME team.
+    - Even if libfprint is not part of GNOME I think these settings are good
+      practice anyways.
+  * debian/patches:
+    - Refresh
+    - Add upstream patch to avoid nbis library warnings.
+      These have been checked to be harmless upstream
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 10 Dec 2020 15:58:37 +0100
+
+libfprint (1:1.90.5+tod1-0ubuntu1) hirsute; urgency=medium
+
+  * New upstream release:
+    - Work around GUsb cancellation issue
+    - Redefine internal image device state machine for more robustness
+    - Add public finger-status reporting to FpDevice
+    - Rework device removal API to be convenient
+    - Enable powersave for unsupported USB devices
+    - Improvements to examples
+    - synaptics: Support identify operation
+    - synaptics: Fix possible crash when the interrupt transfer is resubmitted
+    - synaptics: Add support for PIDs 0x00f9, 0x00fc, 0x00c2 and 0x00c9
+    - elan: Add PID 0x0c4d to supported device list
+    - aes3k: Fix driver and add CI test
+    - uru4000: Fix reference counting of image transfer
+    - vfs301: Fix driver and add CI test
+  * debian/control:
+    - Switch to debhelper 13 and use its features
+    - Add myself to Uploaders
+  * debian/rules:
+    - Ignore failures in s390x as it now builds and tests correctly
+    - Switch to debhelper 13 and use its features
+    - Increase testing timeout
+    - Also build the virtual drivers, as they're useful for
+      testing libfprint and fprintd
+  * debian/libfprint-2-2.symbols: Add new symbols
+  * debian/libfprint-2-tod1.symbols: Add new symbols
+  * debian/libfprint.lintian-overrides: Add override for binary TOD for testing
+  * debian/patches:
+    - Drop patches applied upstream
+    - Use gbp pq topics for debian-specific patches
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Fri, 04 Dec 2020 03:57:04 +0100
+
+libfprint (1:1.90.5-2) unstable; urgency=medium
+
+  * d/p/fpi-device-Return-proper-type-on-identification-success.patch,
+    d/p/test-fpi-device-Always-check-the-return-values-for-the-AP.patch:
+    - Properly handle identify return value and add tests.
+      This fixes fprintd test failures in s390x
+  * d/p/fp-print-Don-t-byte-swap-two-times-the-NBIS-array-content.patch:
+    - Fixes virtual-image test in libfprint for s390x
+  * debian/control: Add myself to Uploaders
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Wed, 02 Dec 2020 17:53:32 +0100
+
+libfprint (1:1.90.5-1) unstable; urgency=medium
+
+  * New upstream release:
+    - Remove USB hub from udev autosupend rules
+    - synaptics: Add PID 0x00c9 which is used in some HP laptops
+  * debian/patches: Use gbp pq topics for debian-specific patches
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Wed, 02 Dec 2020 05:11:33 +0100
+
+libfprint (1:1.90.4-1) unstable; urgency=medium
+
+  * Team upload.
+  [ Marco Trevisan (Treviño) ]
+  * New upstream release:
+    - Work around GUsb cancellation issue
+    - Redefine internal image device state machine for more robustness
+    - Add public finger-status reporting to FpDevice
+    - Rework device removal API to be convenient
+    - Enable powersave for unsupported USB devices (LP: #1905603)
+    - Improvements to examples
+    - synaptics: Support identify operation (LP: #1905600)
+    - synaptics: Fix possible crash when the interrupt transfer is resubmitted
+    - synaptics: Add support for PIDs 0x00f9, 0x00fc and 0x00c2
+    - elan: Add PID 0x0c4d to supported device list
+    - aes3k: Fix driver and add CI test (LP: #1897613)
+    - uru4000: Fix reference counting of image transfer
+    - vfs301: Fix driver and add CI test (LP: #1905597, Closes: #951648)
+  * debian/libfprint-2-2.symbols: Add new symbols
+  * debian/rules: Also build the virtual drivers, as they're useful for
+    testing libfprint and fprintd
+
+  [ Laurent Bigonville ]
+  * debian/control: Bump Standards-Version to 4.5.1 (no further changes)
+
+ -- Laurent Bigonville <bigon@debian.org>  Tue, 01 Dec 2020 11:36:08 +0100
+
+libfprint (1:1.90.3+tod1-0ubuntu3) hirsute; urgency=medium
+
+  * debian/patches:
+    - Reorder to give upstream more priority
+    - Don't use power-save mode for USB controller (LP: #1906296)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Mon, 30 Nov 2020 20:24:59 +0100
+
+libfprint (1:1.90.3+tod1-0ubuntu2) hirsute; urgency=medium
+
+  * debian/gbp.conf: Include debian's GNOME team preferred settings
+  * debian/patches (upstream cherry-picks):
+    - Properly handle aes3k devices, resubmitting commands.
+      This also needs proper commands cancellation (LP: #1897613)
+    - Add support for new Synaptics devices IDs (LP: #1905593)
+    - Fix vfs301 verification using device pointer on callbacks (LP: #1905597)
+    - Ensure we do not waste power for unsupported devices (LP: #1905603)
+    - Add identification support to synaptics driver.
+      It allows to unlock / log-in with any finger. (LP: #1905600)
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Wed, 25 Nov 2020 19:18:20 +0100
+
+libfprint (1:1.90.3+tod1-0ubuntu1) groovy; urgency=medium
+
+  * New upstream release (LP: #1896861):
+    - New goodixmoc driver supporting Goodix USB devices:
+      27C6:5840, 27C6:6496, 27C6:60A2
+    - Newly added support for Synaptics device:
+      06CB:00E9 06CB:00DF (LP: #1893719)
+    - Fixed an issue with Synaptics devices sometimes not working at boot
+      (LP: #1893719)
+    - Fix issue with aes3k driver
+  * debian/libfprint-2-tod1.symbols: Added new GType symbols
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Thu, 24 Sep 2020 06:14:30 +0200
+
+libfprint (1:1.90.3-1) unstable; urgency=medium
+
+  * Team upload.
+  [ Marco Trevisan (Treviño) ]
+  * New upstream release
+    - Fixed crash in VFS0050 (LP: #1876502)
+    - Enrollment fails with UPEK reader (LP: #1881380)
+    - Lots of various drivers fixes
+    - As per a patch for nbis required for some sensors that was accidentally
+      dropped in an earlier release. Users of sensors/drivers aes1610, aes2501,
+      aes2550, aes1660, aes2660, elan, upektc_img) need to re-enroll
+  * d/p/git_reading_pointer.patch:
+    - Dopped (applied upstream)
+
+  [ Laurent Bigonville ]
+  * New upstream release
+
+ -- Laurent Bigonville <bigon@debian.org>  Sun, 15 Nov 2020 16:05:30 +0100
+
+libfprint (1:1.90.2+tod1-0ubuntu1) groovy; urgency=medium
+
+  * New upstream release
+    - Fixed crash in VFS0050 (LP: #1878285)
+    - Enrollment fails with UPEK reader (LP: #1881380)
+    - Lots of various drivers fixes
+    - As per a patch for nbis required for some sensors that was accidentally
+      dropped in an earlier release. Users of sensors/drivers aes1610, aes2501,
+      aes2550, aes1660, aes2660, elan, upektc_img) need to re-enroll
+  * d/p/git_reading_pointer.patch:
+    - Dopped (applied upstream)
+  * debian/control: Add missing libfprint-2-tod-dev dependencies (LP: #1884267)
+  * debian/rules: Be strictier about symbol changes
+  * libfprint-2-tod1.symbols: Add new TOD symbols
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Fri, 19 Jun 2020 17:38:55 +0200
+
+libfprint (1:1.90.1+tod1-0ubuntu4) focal; urgency=medium
+
+  * Rebuild with the new libgusb
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 18 Mar 2020 15:34:58 +0100
+
+libfprint (1:1.90.1+tod1-0ubuntu3) focal; urgency=medium
+
+  * Rebuild with the current libgusb (lp: #1867639)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Mon, 16 Mar 2020 20:27:38 +0100
+
+libfprint (1:1.90.1+tod1-0ubuntu2) focal; urgency=medium
+
+  [ Marco Trevisan (Treviño) ]
+  * debian/control: Make package to match soname, rename to libfprint-2-tod1
+
+ -- Iain Lane <iain.lane@canonical.com>  Tue, 03 Mar 2020 09:21:35 +0000
+
+libfprint (1:1.90.1+tod1-0ubuntu1) focal; urgency=medium
+
+  [ Marco Trevisan (Treviño) ]
+  * TOD: Add TOuch Drivers loader
+  * debian/watch: Monitor libfprint-tod versions only
+  * debian/gbp.conf:
+    - Track ubuntu branch
+    - Use 'upstream-tod' branch as our upstream branch
+  * debian: Add libfprint-2-tod library and headers
+  * debian/control:
+    - Set ubuntu as maintainer
+    - Point Vcs tag to the ubuntu branch
+  * debian/README.tod.md: Added informations about the TOD fork
+
+  [ Iain Lane ]
+  * control: Point Vcs-* to salsa/ubuntu-dev-team/libfprint
+
+ -- Marco Trevisan (Treviño) <marco@ubuntu.com>  Mon, 02 Mar 2020 16:43:58 +0000
+
+libfprint (1:1.90.1-2) experimental; urgency=medium
+
+  * Team upload.
+  [ Laurent Bigonville ]
+  * debian/control: Add libcairo-dev and python3 to build-dependencies as they
+    are explicitly required for some tests
+
+  [ Sebastien Bacher ]
+  * debian/patches/git_reading_pointer.patch:
+    - backport an upstream fix for a test issue
+  * debian/rules:
+    - don't fail the build on s390x test results, upstream stated that
+      fixing those is low priority for them since there is no real
+      usecase for fingerprint authentification on that architecture.
+  * Use the correct indentation for the previous changes
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 27 Feb 2020 16:28:45 +0100
+
+libfprint (1:1.90.1-1) experimental; urgency=medium
+
+  * Team upload.
+  * The "I should check if somebody else hasn't done the work already" release
+  * New upstream release
+    - Replace libusb-1.0 build-dependency by gusb and add libgusb-doc to the
+      Build-Depends-Indep. Also drop libxv-dev from the build-dep.
+    - Drop d/patches/kFreeBSD_FTBFS_add_ETIME_definition.patch and
+      d/patches/use-non-versionned-libusbh-path.patch, not needed anymore
+    - debian/patches/udev-rules-creation-add-Debian-specifics.patch: refreshed
+      by Sebastien Bacher, thanks!
+    - Bump the soname to libfprint-2
+    - Bump libglib2.0-dev and meson minimal versions
+  * Bump debhelper compatibility version to 12
+  * Add gobject-introspection and libgirepository1.0-dev to the
+    build-dependencies and install the GObject introspection bindings
+  * debian/control: Bump Standards-Version to 4.4.1 (no further changes)
+  * debian/control: Build-Depends on python3-cairo, python3-gi, umockdev for
+    the testsuite
+  * Update debian/libfprint2.postinst for the new supported readers
+  * debian/gbp.conf: Upstream tags have changed format
+  * debian/control: Bump Standards-Version to 4.5.0 (no further changes)
+  * d/p/udev-rules-creation-add-Debian-specifics.patch: Avoid unprivileged
+    users to be able to read the devices, this is not necessary and could lead
+    to fingerprint images being captured.
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 13 Feb 2020 16:35:50 +0100
+
+libfprint (1:1.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release
+    - d/p/lib-Add-accessor-for-minutia-coordinates.patch,
+      d/p/fix_ftbfs_meson.patch: Dropped, applied upstream
+    - Other patches: Refreshed
+    - debian/libfprint0.symbols: Add newly exported symbol
+    - debian/libfprint0.postinst: Call udevadm --trigger also for the new
+      supported readers
+  * debian/gbp.conf: Set pristine-tar and upstream-vcs-tag
+  * debian/control: Update Vcs-* fields (Closes: #909256)
+  * debian/rules: Disable the build of the GTK+ test application for now, this
+    is not ready yet
+  * debian/control: Bump Standards-Version to 4.4.0 (no further changes)
+  * debian/libfprint0.symbols: Add the Build-Depends-Package field
+  * debian/control: Add libglib2.0-doc to Build-Depends-Indep, this allows
+    gtk-doc to properly resolve all the links in the documentation
+  * debian/README.source: Document how the list of devices in
+    debian/libfprint0.postinst is generated
+
+ -- Laurent Bigonville <bigon@debian.org>  Fri, 23 Aug 2019 17:27:45 +0200
+
+libfprint (1:0.8.2-3) unstable; urgency=medium
+
+  * Team upload.
+  * d/p/lib-Add-accessor-for-minutia-coordinates.patch: Add a way to access
+    minutia coordinates, this will help to fix ftbfs in fprint_demo
+
+ -- Laurent Bigonville <bigon@debian.org>  Wed, 10 Oct 2018 17:20:45 +0200
+
+libfprint (1:0.8.2-2) unstable; urgency=medium
+
+  * Team upload.
+  * debian/rules: Remove the *.private fields of libfprint.pc (Closes:
+    #906975)
+
+ -- Laurent Bigonville <bigon@debian.org>  Thu, 23 Aug 2018 15:02:51 +0200
+
+libfprint (1:0.8.2-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release (Closes: #904791)
+    - Switch to meson, the static library is not built anymore
+    - Bump debhelper version to >= 10.3 to have meson support
+    - debian/libfprint0.symbols: Add newly exported symbols
+    - Fix security hole by zero out memory when allocated (Closes: #890827)
+    - d/p/kFreeBSD_FTBFS_add_ETIME_definition.patch: Updated
+    - d/p/use-non-versionned-libusbh-path.patch: Updated
+    - debian/libfprint0.postinst: Call udevadm --trigger also for the new
+      supported readers
+  * debian/watch: Update the watch file to point to the freedesktop gitlab
+    release page
+  * Build the documentation
+  * debian/libfprint0.lintian-overrides: Overrides udev-rule-missing-uaccess,
+    we don't want the readers to be accessible by unprivileged users
+  * debian/rules: Do not explicitly pass --parallel to debhelper as it's the
+    default now
+  * debian/control: Bump Standards-Version to 4.1.4 (no further changes)
+  * debian/control: Bump all the packages to priority optional, priority extra
+    is now deprecated
+  * debian/rules: Simplify the installation of the udev rules file
+  * Ship the API doc in a new libfprint-doc package
+  * d/p/fix_ftbfs_meson.patch: Fix FTBFS with newer meson
+  * debian/control: Bump Standards-Version to 4.2.0 (no further changes)
+
+ -- Laurent Bigonville <bigon@debian.org>  Sun, 12 Aug 2018 17:51:42 +0200
+
+libfprint (1:0.7.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New 0.7.0 upstream release:
+    - Add VFS0050 driver (Closes: #843626)
+    - Refresh the patches, drop all the upstreamed ones
+  * Bump debhelper compatibility to 10 and rely on dh_autoreconf instead of
+    calling the autotools explicitly
+  * debian/control:
+    - Bump Standards-Version to 3.9.8 (no further changes)
+    - Use https for the Homepage and Vcs-* fields
+    - Drop libssl-dev build-dependency, not needed anymore (Closes: #854710)
+    - Drop libmagickcore-dev build-dep and add libpixman-1-dev
+      instead, ImageMagick is not supported since 0.6.0
+  * Add debian/watch file
+  * debian/libfprint0.postinst: Add new calls to "udevadm --trigger" to
+    also properly set the permissions on the newest supported readers.
+
+ -- Laurent Bigonville <bigon@debian.org>  Wed, 17 May 2017 16:58:45 +0200
+
+libfprint (1:0.6.0-2) unstable; urgency=low
+
+  * Upload to unstable
+  * Add simple gbp.conf to help with releasing
+
+ -- Didier Raboud <odyx@debian.org>  Sun, 03 May 2015 15:19:19 +0200
+
+libfprint (1:0.6.0-1) experimental; urgency=medium
+
+  * New 0.6.0 upstream release:
+    * Drivers:
+      - Reduce duplication between AES3500 and AES4000 drivers and add support
+        for AES3500 device
+      - Add support for UPEK 147e:2020 and Upek Eikon 2 devices
+      - Add EgisTec ES603 driver
+      - Add VFS5011 driver (Closes: #713815)
+      - Always perform 5 scans for image enrollment
+      - Better verification with AES1660 driver
+      - Better verification for a number of AES drivers
+    * Library:
+      - Always use Pixman for image manipulation, gdk-pixbuf and ImageMagick
+        are not supported any more.
+    * Udev rules:
+      - Fix warning when USB hub or system does not support power management
+
+  [ Didier Raboud ]
+  * Refresh Debian patches
+  * Backport two upstream patches:
+    - imgdev: fix enum mismatch for dev_change_state() call
+    - vfs101: Logical conjunction always evaluates to false
+  * Add two new 0.6.0 symbols
+
+ -- Didier Raboud <odyx@debian.org>  Fri, 27 Mar 2015 08:33:53 +0100
+
+libfprint (1:0.5.1-1) unstable; urgency=low
+
+  * New 0.5.1 upstream release:
+    - Update patches list for 0.5.1, drop 6 patches incorporated or
+      backported from upstream, refresh one.
+
+ -- Didier Raboud <odyx@debian.org>  Sun, 29 Sep 2013 13:41:22 +0200
+
+libfprint (1:0.5.0-6) unstable; urgency=low
+
+  [ Jeremy Bicha ]
+  * Fix underlinking against glib - thanks to Julian Taylor
+   (Closes: #710381, #713466) 
+
+  [ Didier Raboud ]
+  * Run udevadm trigger on 147e:2020 too
+
+ -- Didier Raboud <odyx@debian.org>  Mon, 24 Jun 2013 11:24:43 +0200
+
+libfprint (1:0.5.0-5) unstable; urgency=low
+
+  * Upload to unstable with two more backports from upstream:
+    - imgdev: fix cancelling of enrollment from stage_completed callback
+    - upeke2: Add support for 147e:2020 ID
+
+ -- Didier Raboud <odyx@debian.org>  Sat, 18 May 2013 16:35:39 +0200
+
+libfprint (1:0.5.0-4) experimental; urgency=low
+
+  * Correct the kFreeBSD ETIME patch update to define ETIME later.
+
+ -- Didier Raboud <odyx@debian.org>  Sun, 03 Mar 2013 15:22:25 +0100
+
+libfprint (1:0.5.0-3) experimental; urgency=low
+
+  * Update kFreeBSD ETIME patch to also correct the vfs301 driver.
+
+ -- Didier Raboud <odyx@debian.org>  Sun, 03 Mar 2013 13:56:16 +0100
+
+libfprint (1:0.5.0-2) experimental; urgency=low
+
+  * Patch vfs301 driver to look for libusb.h without the versionned
+    path, hopefully fixes the kFreeBSD FTBFS.
+  * Bump Standards-Version to 3.9.4 without changes needed.
+  * Only execute the udevadm commands if udevadm is in the script path,
+    allows seamless install in chroots without udev and non-Linux.
+
+ -- Didier Raboud <odyx@debian.org>  Sun, 03 Mar 2013 12:58:41 +0100
+
+libfprint (1:0.5.0-1) experimental; urgency=low
+
+  * New 0.5.0 upstream release.
+
+  [ Didier Raboud ]
+  * Refresh all patches for 0.5.0
+    - Drop fix-libusb-global-variables-FTBFS.patch implemented upstream.
+  * Backport two upstream hotfixes for uru4000:
+    - uru4000: fix race condition on waiting power up irq
+    - uru4000: fix cancelling of imaging from error callback
+
+  [ Luca Capello ]
+  * Apply udev rules at install time with udevadm --trigger (Closes: #683863)
+
+ -- Didier Raboud <odyx@debian.org>  Sat, 02 Mar 2013 18:52:25 +0100
+
+libfprint (1:0.4.0-4-gdfff16f-4) unstable; urgency=low
+
+  * Fix libusb global variables FTBFS. (Closes: #680838)
+
+ -- Didier Raboud <odyx@debian.org>  Mon, 09 Jul 2012 00:46:05 +0200
+
+libfprint (1:0.4.0-4-gdfff16f-3) unstable; urgency=low
+
+  * Patch the udev rules creator to:
+    - include all devices; (Closes: #679001)
+    - handle blacklists correctly.
+
+ -- Didier Raboud <odyx@debian.org>  Tue, 26 Jun 2012 10:52:16 +0200
+
+libfprint (1:0.4.0-4-gdfff16f-2) unstable; urgency=low
+
+  * Mark libfprint0 Multi-Arch: same.
+  * Add patch to define ETIME for the kFreeBSD flavours. (Closes:
+    #673704)
+
+ -- Didier Raboud <odyx@debian.org>  Mon, 21 May 2012 10:55:36 +0200
+
+libfprint (1:0.4.0-4-gdfff16f-1) unstable; urgency=low
+
+  * New upstream release snapshot.
+    - Fix versioning with an epoch: the 0.4.0 version was released and
+      this is indeed a post-0.4.0 upstream snapshot.
+
+  * Bump debhelper Build-Depends and compat to 9.
+  * Use short debhelper style; migrate to multiarch.
+  * Use the built udev rules for autosuspend; append our mode and group
+    specificities.
+  * Add symbols tracking for libfprint0.
+  * Update homepage to the new home at freedesktop.org.
+  * Bump Standards-Version to 3.9.3 without changes needed.
+  * Add Vcs-* to reflect the new Git repository.
+  * Drop the mention of the old synchronous library from the
+    description.
+  * Drop useless dirs specifications.
+  * Avoid duplication of Section snippet in control.
+  * Add myself as uploader.
+
+ -- Didier Raboud <odyx@debian.org>  Sat, 19 May 2012 17:11:57 +0200
+
+libfprint (20110418git-2) unstable; urgency=low
+
+  * Transitioning from libmagick9 to libmagickcore (Closes: #625597, #629788).
+
+ -- Ulises Vitulli <dererk@debian.org>  Sun, 12 Jun 2011 12:22:16 -0300
+
+libfprint (20110418git-1) unstable; urgency=low
+
+  * New upstream release.
+  * Removing resigned uploader from the Uploaders filed (Closes: #595719).
+  * Cleaning out 'dependency_libs' for multiarch support (Closes: #620447).
+  * Added libnss as build-depend for uru4000.  
+  * Added Validity VFS101 device support. 
+  * Bump Standard-version up to 3.9.2.0 (no changes needed).
+
+ -- Ulises Vitulli <dererk@debian.org>  Tue, 19 Apr 2011 14:58:27 -0300
+
+libfprint (20100820git-1) unstable; urgency=low
+
+  * New upstream snapshot.
+  * Remove local patches, reported and applied on upstream side, 
+    thanks BastienNocera:
+    - Check-return-code-from-img2print-conversion.patch.
+    - Add-some-corrective-action-if-there-are-missing-pack.patch.
+    - Make-the-2-right-shift-correction-happen-on-image-ha.patch.
+    - Dont-consider-the-scan-complete-unless-there-is-atle.patch.
+
+ -- Ulises Vitulli <dererk@debian.org>  Mon, 23 Aug 2010 09:02:32 -0300
+
+libfprint (20100819git-2) unstable; urgency=low
+
+  * debian/libfprint0.udev:
+    - Include support for uru400 (05ba:0008).
+    - Include support for upeke2 and upeksonly (147e:2016).
+    - Include support for Veridicom 5thSense (061a:0110).
+
+ -- Ulises Vitulli <dererk@debian.org>  Sun, 22 Aug 2010 21:48:02 -0300
+
+libfprint (20100819git-1) unstable; urgency=low
+
+  * New upstream release:
+    - upeke2: Add support for 0x2e status code (Closes: #584563, #585179).
+    - Don't crash when no devices are present.
+    - Implement discover() methods for upeke2 and upeksonly.
+    - Rework "discover" code for drivers.
+    - Finish implementation of AES1610 driver.
+    - Add udev rules to set devices to autosuspend.
+    - Add gdk-pixbuf support.
+  * Bump Standard-version up to 3.9.1.
+
+ -- Ulises Vitulli <dererk@debian.org>  Thu, 19 Aug 2010 13:30:18 -0300
+
+libfprint (20081125git-4) unstable; urgency=low
+
+  * debian/libfprint0.udev:
+    Include support for aes2501-wy (08ff:2500).
+
+ -- Ulises Vitulli <uvitulli@fi.uba.ar>  Sun, 18 Apr 2010 18:34:23 -0300
+
+libfprint (20081125git-3) unstable; urgency=low
+
+  * The 'Oh-yeah!' upload:
+    - Droping pkg from experimental, now going to unstable.
+  * Switch to dpkg-source 3.0 (quilt) format.
+  * Minor package updates to comply with 3.8.4 standard.
+    - debian/control: Added misc:Depends for libfprint0+libfprint-dev.
+
+ -- Ulises Vitulli <uvitulli@fi.uba.ar>  Wed, 14 Apr 2010 12:00:01 -0300
+
+libfprint (20081125git-2) experimental; urgency=low
+
+  * Fix missing dependence (Closes: #539085).
+
+ -- Ulises Vitulli <uvitulli@fi.uba.ar>  Wed, 29 Jul 2009 08:21:37 -0300
+
+libfprint (20081125git-1) experimental; urgency=low
+
+  * Synchronized to upstream v0.1.0-pre1 release.
+  * Upstream git checkout fixing little issues:
+    - Fixes libtool problem.
+    - Add more debuging support.
+  * Minor package updates to comply with 3.8.2 standard.
+  * Now depends on libusb-1.0.
+
+ -- Ulises Vitulli <uvitulli@fi.uba.ar>  Sat, 06 Jun 2009 12:00:26 -0300
+
+libfprint (0.0.6-2) experimental; urgency=low
+
+  * Fixing to non-native pkg (Closes: 481434)
+
+ -- Ulises Vitulli <uvitulli@fi.uba.ar>  Thu, 15 May 2008 21:56:24 -0300
+
+libfprint (0.0.6-1) experimental; urgency=low
+
+  * New upstream release (Closes: #472780).
+  * Adding udev rule allowing 'plugdev' group access fprint known devices.
+
+ -- Ulises Vitulli <uvitulli@fi.uba.ar>  Wed, 26 Mar 2008 10:59:55 -0300
+
+libfprint (0.0.5-3) experimental; urgency=low
+
+  * Fixing dependences (Closes: #469813)
+
+ -- Ulises Vitulli <uvitulli@fi.uba.ar>  Fri, 07 Mar 2008 08:47:18 -0200
+
+libfprint (0.0.5-2) experimental; urgency=low
+
+  * Added license for nbis/* files in copyright file
+
+ -- Miguel Gea Milvaques <xerakko@debian.org>  Mon, 04 Feb 2008 21:02:48 +0100
+
+libfprint (0.0.5-1) experimental; urgency=low
+
+  [ Emfox Zhou ]
+  * Initial release (Closes: #460493, #438922)
+
+  [ Miguel Gea Milvaques ]
+  * Moved target from unstable to experimental
+  * Lintian clean ( makefile distclean in rules)
+
+ -- Miguel Gea Milvaques <xerakko@debian.org>  Sat, 02 Feb 2008 22:56:51 +0100
