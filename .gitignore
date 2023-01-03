@@ -9,3 +9,4 @@
 #WHITELIST
 !.gitignore
 !/libfprint-1.94.3+tod1/**
+!libfprint-build-deps_1.94.3+tod1-0ubuntu2~22.04.03_all.deb
