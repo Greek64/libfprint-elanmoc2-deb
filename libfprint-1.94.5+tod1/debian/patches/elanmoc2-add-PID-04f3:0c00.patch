@@ -1,0 +1,11 @@
+Index: libfprint-1.94.5+tod1/libfprint/drivers/elanmoc2/elanmoc2.h
+===================================================================
+--- libfprint-1.94.5+tod1.orig/libfprint/drivers/elanmoc2/elanmoc2.h
++++ libfprint-1.94.5+tod1/libfprint/drivers/elanmoc2/elanmoc2.h
+@@ -191,5 +191,6 @@ enum clear_storage_states {
+ 
+ static const FpIdEntry elanmoc2_id_table[] = {
+     {.vid = ELANMOC2_VEND_ID, .pid = 0x0c4c, .driver_data = ELANMOC2_ALL_DEV},
++    {.vid = ELANMOC2_VEND_ID, .pid = 0x0c00, .driver_data = ELANMOC2_ALL_DEV},
+     {.vid = 0, .pid = 0, .driver_data = ELANMOC2_DEV_0C4C}
+ };
