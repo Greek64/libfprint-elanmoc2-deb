@@ -10,6 +10,7 @@
 !.gitignore
 !/libfprint-1.94.3+tod1/**
 !libfprint-build-deps_1.94.3+tod1-0ubuntu2~22.04.03_all.deb
+!README.md
 
 #Add Missing Build Artefact Ignores
 libfprint-1.94.3+tod1/tests/__pycache__/
