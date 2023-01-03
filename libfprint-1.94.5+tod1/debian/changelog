@@ -1,3 +1,10 @@
+libfprint (1:1.94.5+tod1-0ubuntu1.1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * Add elanmoc2 driver
+
+ -- root <root@c564ac59908c>  Tue, 03 Jan 2023 16:14:09 +0000
+
 libfprint (1:1.94.5+tod1-0ubuntu1) kinetic; urgency=medium
 
   * New upstream release (LP: #1992855):
