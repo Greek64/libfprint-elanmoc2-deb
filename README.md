@@ -1,4 +1,4 @@
-This repository contains the source code of the Debian package `libfprint-2-2`, modified to add the [elanmoc2](https://gitlab.freedesktop.org/Depau/libfprint/-/tree/elanmoc2) fingerprint reader driver.
+This repository contains the source code of the Debian/Ubuntu package `libfprint-2-2`, modified to add the [elanmoc2](https://gitlab.freedesktop.org/Depau/libfprint/-/tree/elanmoc2) fingerprint reader driver.
 
 Although this fingerprint reader driver is originally developed for `04f3:0c4c` devices, it is also applicable for [`04f3:0c00`](https://gitlab.freedesktop.org/Depau/libfprint/-/merge_requests/1) devices.
 
@@ -6,7 +6,7 @@ Once the elanmoc2 driver has been incorporated upstream ([PR](https://gitlab.fre
 
 # USAGE
 
-This repository has branches depending on the version of the Debian source package.  
+This repository has branches depending on the version of the Debian/Ubuntu source package.  
 Checkout the desired branch, and follow the respective README instructions.
 
 # MAINTAINANCE STATUS
@@ -21,6 +21,9 @@ For the above reasons I have also disabled issues, but have enabled discussions,
 For completness sake I will provide the instructions that I used to create this repository:
 
 ```
+#Install Build Requirements
+apt install devscripts dpkg-dev quilt equivs
+
 #Download Source
 apt source libfprint-2-2 --download-only
 
@@ -33,7 +36,19 @@ mk-build-deps libfprint-2-2
 #Build
 dpkg-buildpackage -b -uc -us
 
-#Fix Build Issues
+#Modify Code
+# I suggest to not add the changes directly to the source code, but apply them through patches.
+# Configure quilt
+export QUILT_PATCHES=debian/patches
+export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
+# Apply all current patches
+quilt push -a
+# Make new Patch
+quilt new <PATCHNAME>.patch
+# Configure files to track modifications for the patch (Even for "new" files)
+quilt add <PATH_TO_FILE>
+# Store modifications in patch
+quilt refresh
 #NOTE: If build fails, dpkg-buildpackage does not unapply the debian patches. If you want to manually unapply the paches run 'quilt pop -a'.
 
 #Clean
