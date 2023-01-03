@@ -1,3 +1,10 @@
+libfprint (1:1.94.3+tod1-0ubuntu2~22.04.04) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * Add elanmoc2 driver
+
+ -- root <root@d901664e9370>  Tue, 03 Jan 2023 10:51:11 +0000
+
 libfprint (1:1.94.3+tod1-0ubuntu2~22.04.03) jammy; urgency=medium
 
   [ Andy Chi ]
