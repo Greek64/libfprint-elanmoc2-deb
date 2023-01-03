@@ -1,0 +1,10 @@
+The libfprint-2-2 postinst script calls udevadmin trigger for all the supported
+USB readers. The list of readers used in that file is generated using the gbp
+import hook when `gbp import-orig` (via --uscan or with a tarball) is used.
+
+Alternatively it can be called manually by using:
+
+  GBP_SOURCES_DIR=. debian/update-udev-triggers.sh
+
+When preparing a new upstream release, this script should be called against the
+upstream provided .hwdb file.

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+#DEBHELPER#
+
+if [ "$1" = "configure" -o "$1" = "upgrade" ] && command -V udevadm >/dev/null 2>&1; then
+	# apply hwdb rules at package installation, see
+	# <http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=683863#27>
+	# NOTA BENE: after the DEBHELPER section since dh_installudev
+	# adds stuff there
+	# The devices ID list is auto-generated using the gbp postimport hook
+	# see debian/README.sources for more details.
+@UDEVADM_TRIGGERS@
+fi
+
+exit 0

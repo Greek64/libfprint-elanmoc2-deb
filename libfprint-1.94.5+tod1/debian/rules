@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = optimize=-lto
+export DPKG_GENSYMBOLS_CHECK_LEVEL = 2
+
+BUILDDIR = $(CURDIR)/obj-$(DEB_HOST_GNU_TYPE)
+
+# Configuration arguments
+CONFIG_ARGS = \
+	-Dudev_hwdb_dir=/lib/udev/hwdb.d \
+	-Dudev_rules_dir=/lib/udev/rules.d \
+	-Ddrivers=all \
+	-Dgtk-examples=false
+
+%:
+	dh $@ --with gir
+
+override_dh_auto_configure:
+	dh_auto_configure -- $(CONFIG_ARGS)
+
+override_dh_auto_test:
+	dh_auto_test -- -C $(BUILDDIR) --timeout-multiplier 5

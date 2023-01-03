@@ -1,0 +1,47 @@
+# Bump image version on .gitlab-ci/libfprint-image-variables.yaml to trigger
+# a rebuild on changes to this file
+
+.libfprint_common_variables:
+  LIBFPRINT_DEPENDENCIES:
+    doxygen
+    dnf-plugins-core
+    flatpak-builder
+    gcc
+    gcc-c++
+    gcovr
+    git
+    glib2-devel
+    glibc-devel
+    gobject-introspection-devel
+    gtk-doc
+    gtk3-devel
+    libabigail
+    libgusb-devel
+    libgudev-devel
+    libX11-devel
+    libXv-devel
+    meson
+    nss-devel
+    pixman-devel
+    python3-cairo
+    python3-gobject
+    systemd
+    umockdev
+    uncrustify
+    valgrind
+    clang-analyzer
+    diffutils
+
+  LIBFPRINT_EXEC: |
+    dnf debuginfo-install -y \
+      glib2 \
+      glibc \
+      libgusb \
+      libusb \
+      nss \
+      pixman
+
+    git clone https://github.com/martinpitt/umockdev.git && \
+        cd umockdev && \
+        meson _build --prefix=/usr && \
+        ninja -C _build && ninja -C _build install
