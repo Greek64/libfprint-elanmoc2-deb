@@ -5,3 +5,4 @@ elanmoc-Make-sure-sensor-in-the-right-mode-at-identity.patch
 goodixmoc-add-PID-0x631C.patch
 goodixmoc-add-PID-0x634C.patch
 elanmoc2-add-elanmoc2-driver.patch
+elanmo2-add-PID-04f3:0c00.patch
